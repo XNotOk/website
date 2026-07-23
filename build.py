@@ -40,10 +40,8 @@ class Header(Component):
             "justify-content": "space-between",
         })
         logo_s = Style({
-            "font-size": "24px",
-            "font-weight": "800",
-            "color": GOLD,
-            "letter-spacing": "-0.5px",
+            "height": "36px",
+            "width": "auto",
         })
         nav_s = Style({
             "display": "flex",
@@ -68,7 +66,9 @@ class Header(Component):
             ":hover": {"background": "#e89f2c"},
         })
         return tags.nav(class_=s.class_name)(
-            tags.a(href="#home", class_=logo_s.class_name)("Fare-Cab"),
+            tags.a(href="#home")(
+                tags.img(src="logo.png", alt="Fare-Cab", class_=logo_s.class_name),
+            ),
             tags.div(class_=nav_s.class_name)(
                 tags.a(href="#home", class_=link.class_name)("Home"),
                 tags.a(href="#heathrow", class_=link.class_name)("Heathrow"),
@@ -580,9 +580,8 @@ class Footer(Component):
             "text-align": "center",
         })
         logo_s = Style({
-            "font-size": "20px",
-            "font-weight": "800",
-            "color": GOLD,
+            "height": "28px",
+            "width": "auto",
             "margin-bottom": "8px",
         })
         p_s = Style({
@@ -590,7 +589,7 @@ class Footer(Component):
             "color": "rgba(255,255,255,0.5)",
         })
         return tags.footer(class_=s.class_name)(
-            tags.div(class_=logo_s.class_name)("Fare-Cab"),
+            tags.img(src="logo.png", alt="Fare-Cab", class_=logo_s.class_name),
             tags.p(class_=p_s.class_name)("Copyright 2026 Fare-Cab. All rights reserved."),
         ).render()
 
