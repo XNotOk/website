@@ -452,10 +452,48 @@ class QuoteSection(Component):
 
         quote_js = """
         <script>
-        function submitQuote(event) {
+        async function submitQuote(event) {
             event.preventDefault();
-            document.getElementById('quote-success').style.display = 'block';
-            document.getElementById('quote-success').scrollIntoView({ behavior: 'smooth' });
+            const form = document.getElementById('quote-form');
+            const btn = form.querySelector('button[type="submit"]');
+            const success = document.getElementById('quote-success');
+            const error = document.getElementById('quote-error');
+
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            const data = {
+                name: document.getElementById('quote-name').value,
+                email: document.getElementById('quote-email').value,
+                phone: document.getElementById('quote-phone').value,
+                passengers: document.getElementById('quote-passengers').value,
+                pickup: document.getElementById('quote-pickup').value,
+                destination: document.getElementById('quote-destination').value,
+                date: document.getElementById('quote-date').value,
+                message: document.getElementById('quote-message').value,
+            };
+
+            try {
+                const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+                    body: JSON.stringify(data),
+                });
+                if (res.ok) {
+                    success.style.display = 'block';
+                    error.style.display = 'none';
+                    form.reset();
+                } else {
+                    error.style.display = 'block';
+                    success.style.display = 'none';
+                }
+            } catch (e) {
+                error.style.display = 'block';
+                success.style.display = 'none';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Request Quote';
+            success.scrollIntoView({ behavior: 'smooth' });
         }
         </script>
         """
@@ -511,6 +549,19 @@ class QuoteSection(Component):
                     ),
                     tags.div(id="quote-success", class_=success_s.class_name)(
                         "Thank you! Your quote request has been received. We'll be in touch shortly."
+                    ),
+                    tags.div(id="quote-error", class_=Style({
+                        "display": "none",
+                        "background": "#f8d7da",
+                        "color": "#721c24",
+                        "padding": "24px",
+                        "border-radius": "12px",
+                        "margin-top": "24px",
+                        "text-align": "center",
+                        "font-size": "16px",
+                        "font-weight": "500",
+                    }).class_name)(
+                        "Something went wrong. Please try again or email us directly."
                     ),
                     tags.p(class_=note_s.class_name)(
                         "By submitting you agree to our privacy policy. Your data is kept secure."
