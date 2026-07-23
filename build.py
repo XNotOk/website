@@ -42,14 +42,23 @@ class Header(Component):
         logo_wrap = Style({
             "background": WHITE,
             "border-radius": "8px",
-            "padding": "4px 8px",
+            "padding": "4px 14px 4px 4px",
             "display": "inline-flex",
             "align-items": "center",
+            "gap": "10px",
+            "text-decoration": "none",
         })
         logo_s = Style({
             "height": "40px",
             "width": "auto",
             "display": "block",
+        })
+        logo_text = Style({
+            "font-family": "'Times New Roman', Times, serif",
+            "font-size": "22px",
+            "font-weight": "700",
+            "color": NAVY,
+            "letter-spacing": "-0.5px",
         })
         nav_s = Style({
             "display": "flex",
@@ -76,6 +85,7 @@ class Header(Component):
         return tags.nav(class_=s.class_name)(
             tags.a(href="#home", class_=logo_wrap.class_name)(
                 tags.img(src="logo.png", alt="Fare-Cab", class_=logo_s.class_name),
+                tags.span(class_=logo_text.class_name)("Fare Cab"),
             ),
             tags.div(class_=nav_s.class_name)(
                 tags.a(href="#home", class_=link.class_name)("Home"),
