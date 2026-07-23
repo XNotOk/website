@@ -25,6 +25,7 @@ def global_styles() -> str:
             "color": "#2d2d2d",
             "line-height": "1.6",
             "background": LIGHT,
+            "scroll-behavior": "smooth",
         },
     })
 
@@ -67,12 +68,12 @@ class Header(Component):
             ":hover": {"background": "#e89f2c"},
         })
         return tags.nav(class_=s.class_name)(
-            tags.div(class_=logo_s.class_name)("Fare-Cab"),
+            tags.a(href="#home", class_=logo_s.class_name)("Fare-Cab"),
             tags.div(class_=nav_s.class_name)(
-                tags.a(href="#", class_=link.class_name)("Home"),
+                tags.a(href="#home", class_=link.class_name)("Home"),
                 tags.a(href="#heathrow", class_=link.class_name)("Heathrow"),
-                tags.a(href="#", class_=link.class_name)("All Fares"),
-                tags.a(href="#", class_=btn.class_name)("Get a Quote"),
+                tags.a(href="#fares", class_=link.class_name)("All Fares"),
+                tags.a(href="#quote", class_=btn.class_name)("Get a Quote"),
             ),
         ).render()
 
@@ -98,7 +99,7 @@ class Hero(Component):
             "max-width": "550px",
             "margin": "0 auto 32px",
         })
-        return tags.section(class_=s.class_name)(
+        return tags.section(id="home", class_=s.class_name)(
             tags.h1(class_=h1_s.class_name)("London Black Cab Fares"),
             tags.p(class_=p_s.class_name)(
                 "Know your fare before you ride. Instant Heathrow airport transfer pricing."
@@ -251,7 +252,7 @@ class FareLookup(Component):
         </script>
         """
 
-        return tags.section(class_=section_s.class_name)(
+        return tags.section(id="heathrow", class_=section_s.class_name)(
             Raw(lookup_js),
             tags.div(class_=card_s.class_name)(
                 tags.h2(class_=h2_s.class_name)("Heathrow Fare Lookup"),
@@ -340,7 +341,7 @@ class AllFaresSection(Component):
                 f"</tr>"
             )
 
-        return tags.section(class_=section_s.class_name)(
+        return tags.section(id="fares", class_=section_s.class_name)(
             tags.h2(class_=h2_s.class_name)("All Heathrow Fares"),
             tags.div(class_=table_wrap.class_name)(
                 tags.table(class_=table_s.class_name)(
@@ -353,6 +354,168 @@ class AllFaresSection(Component):
                     ),
                     tags.tbody()(Raw(rows_html)),
                 )
+            ),
+        ).render()
+
+
+class QuoteSection(Component):
+    def render(self) -> str:
+        section_s = Style({
+            "padding": "80px 40px",
+            "max-width": "800px",
+            "margin": "0 auto",
+        })
+        card_s = Style({
+            "background": WHITE,
+            "border-radius": "20px",
+            "padding": "48px",
+            "box-shadow": "0 8px 40px rgba(0,0,0,0.08)",
+        })
+        h2_s = Style({
+            "font-size": "28px",
+            "font-weight": "700",
+            "color": NAVY,
+            "margin-bottom": "8px",
+        })
+        sub_s = Style({
+            "font-size": "15px",
+            "color": GREY,
+            "margin-bottom": "36px",
+        })
+        grid_s = Style({
+            "display": "grid",
+            "grid-template-columns": "1fr 1fr",
+            "gap": "20px",
+        })
+        full_s = Style({
+            "grid-column": "1 / -1",
+        })
+        label_s = Style({
+            "display": "block",
+            "font-size": "13px",
+            "font-weight": "600",
+            "color": NAVY,
+            "margin-bottom": "6px",
+        })
+        field_s = Style({
+            "width": "100%",
+            "padding": "12px 16px",
+            "border": "2px solid #e0e0e0",
+            "border-radius": "10px",
+            "font-size": "15px",
+            "outline": "none",
+            "transition": "border-color 0.3s",
+            ":focus": {"border-color": GOLD},
+        })
+        textarea_s = Style({
+            "width": "100%",
+            "padding": "12px 16px",
+            "border": "2px solid #e0e0e0",
+            "border-radius": "10px",
+            "font-size": "15px",
+            "outline": "none",
+            "transition": "border-color 0.3s",
+            "resize": "vertical",
+            "min-height": "100px",
+            "font-family": "inherit",
+            ":focus": {"border-color": GOLD},
+        })
+        submit_s = Style({
+            "background": GOLD,
+            "color": NAVY,
+            "border": "none",
+            "padding": "14px 48px",
+            "border-radius": "50px",
+            "font-size": "16px",
+            "font-weight": "700",
+            "cursor": "pointer",
+            "transition": "background 0.3s",
+            ":hover": {"background": "#e89f2c"},
+        })
+        success_s = Style({
+            "display": "none",
+            "background": "#d4edda",
+            "color": "#155724",
+            "padding": "24px",
+            "border-radius": "12px",
+            "margin-top": "24px",
+            "text-align": "center",
+            "font-size": "16px",
+            "font-weight": "500",
+        })
+        note_s = Style({
+            "text-align": "center",
+            "font-size": "13px",
+            "color": GREY,
+            "margin-top": "20px",
+        })
+
+        quote_js = """
+        <script>
+        function submitQuote(event) {
+            event.preventDefault();
+            document.getElementById('quote-success').style.display = 'block';
+            document.getElementById('quote-success').scrollIntoView({ behavior: 'smooth' });
+        }
+        </script>
+        """
+
+        return tags.section(id="quote", class_=section_s.class_name)(
+            Raw(quote_js),
+            tags.div(class_=card_s.class_name)(
+                tags.h2(class_=h2_s.class_name)("Get a Quote"),
+                tags.p(class_=sub_s.class_name)(
+                    "Fill in your details and we'll get back to you with a tailored quote."
+                ),
+                tags.form(id="quote-form", onsubmit="submitQuote(event)")(
+                    tags.div(class_=grid_s.class_name)(
+                        tags.div()(
+                            tags.label(class_=label_s.class_name, for_="quote-name")("Full Name"),
+                            tags.input_(type="text", id="quote-name", class_=field_s.class_name, placeholder="Your name", required="required"),
+                        ),
+                        tags.div()(
+                            tags.label(class_=label_s.class_name, for_="quote-email")("Email"),
+                            tags.input_(type="email", id="quote-email", class_=field_s.class_name, placeholder="your@email.com", required="required"),
+                        ),
+                        tags.div()(
+                            tags.label(class_=label_s.class_name, for_="quote-phone")("Phone"),
+                            tags.input_(type="tel", id="quote-phone", class_=field_s.class_name, placeholder="07700 900000"),
+                        ),
+                        tags.div()(
+                            tags.label(class_=label_s.class_name, for_="quote-passengers")("Passengers"),
+                            tags.input_(type="number", id="quote-passengers", class_=field_s.class_name, placeholder="2", min="1", max="8"),
+                        ),
+                        tags.div(class_=full_s.class_name)(
+                            tags.label(class_=label_s.class_name, for_="quote-pickup")("Pickup Postcode"),
+                        )(
+                            tags.input_(type="text", id="quote-pickup", class_=field_s.class_name, placeholder="e.g. SW1A 1AA", required="required"),
+                        ),
+                        tags.div(class_=full_s.class_name)(
+                            tags.label(class_=label_s.class_name, for_="quote-destination")("Destination"),
+                        )(
+                            tags.input_(type="text", id="quote-destination", class_=field_s.class_name, placeholder="e.g. Heathrow Airport, Terminal 5", value="Heathrow Airport"),
+                        ),
+                        tags.div(class_=full_s.class_name)(
+                            tags.label(class_=label_s.class_name, for_="quote-date")("Travel Date & Time"),
+                        )(
+                            tags.input_(type="datetime-local", id="quote-date", class_=field_s.class_name),
+                        ),
+                        tags.div(class_=full_s.class_name)(
+                            tags.label(class_=label_s.class_name, for_="quote-message")("Additional Notes"),
+                        )(
+                            tags.textarea(id="quote-message", class_=textarea_s.class_name, placeholder="Any special requirements..."),
+                        ),
+                    ),
+                    tags.div(style={"text-align": "center", "margin-top": "28px"})(
+                        tags.button(type="submit", class_=submit_s.class_name)("Request Quote"),
+                    ),
+                    tags.div(id="quote-success", class_=success_s.class_name)(
+                        "Thank you! Your quote request has been received. We'll be in touch shortly."
+                    ),
+                    tags.p(class_=note_s.class_name)(
+                        "By submitting you agree to our privacy policy. Your data is kept secure."
+                    ),
+                ),
             ),
         ).render()
 
@@ -389,6 +552,7 @@ class FareCabPage(Component):
                 Hero(),
                 FareLookup(),
                 AllFaresSection(),
+                QuoteSection(),
                 Footer(),
             ]
         )
