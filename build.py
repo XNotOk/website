@@ -184,62 +184,70 @@ class FareLookup(Component):
             "text-align": "center",
         })
 
-        lookup_js = """
+        from fares_db import get_conn
+        with get_conn() as conn:
+            rows = conn.execute(
+                "SELECT postcode_prefix, cost, zone FROM fares ORDER BY postcode_prefix"
+            ).fetchall()
+        fares_json = []
+        for prefix, cost, zone in rows:
+            fares_json.append(f'"{prefix}":{{"cost":{cost},"zone":"{zone}"}}')
+        fares_js_obj = "{" + ",".join(fares_json) + "}"
+
+        lookup_js = f"""
         <script>
-        async function lookupFare() {
+        const FARES = {fares_js_obj};
+
+        function lookupFare() {{
             const input = document.getElementById('postcode-input');
             const result = document.getElementById('fare-result');
-            const prefix = input.value.trim().toUpperCase();
+            const raw = input.value.trim().toUpperCase();
 
-            if (!prefix) {
+            if (!raw) {{
                 result.style.display = 'block';
                 result.style.background = '#fff3cd';
                 result.style.color = '#856404';
                 result.innerHTML = 'Please enter a postcode area (e.g. SW1, N1, TW6)';
                 return;
-            }
+            }}
 
-            result.innerHTML = '<div style="text-align:center;padding:12px">Looking up fare...</div>';
-            result.style.display = 'block';
-            result.style.background = '#f8f9fa';
-            result.style.color = '#2d2d2d';
-
-            try {
-                const response = await fetch('/api/rpc', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        func: 'get_fare',
-                        args: [prefix],
-                        kwargs: {}
-                    })
-                });
-                const data = await response.json();
-
-                if (data.error) {
-                    result.style.background = '#fff3cd';
-                    result.style.color = '#856404';
-                    result.innerHTML = '<strong>Not found:</strong> No fare data for "' + prefix + '". Try a shorter prefix like SW1 or N1.';
-                    return;
-                }
-
-                const fare = data.result;
+            const exact = FARES[raw];
+            if (exact) {{
                 result.style.background = '#d4edda';
                 result.style.color = '#155724';
-                result.innerHTML = '<div style="font-size:14px;margin-bottom:4px">Fare from <strong>' + fare.prefix + '</strong> (' + fare.zone + ') to Heathrow:</div>' +
-                    '<div style="font-size:36px;font-weight:800;color:#1a1a2e">&pound;' + fare.cost.toFixed(2) + '</div>';
-            } catch (e) {
-                result.style.background = '#f8d7da';
-                result.style.color = '#721c24';
-                result.innerHTML = 'Error looking up fare. Is the server running?';
-            }
-        }
+                result.innerHTML = '<div style="font-size:14px;margin-bottom:4px">Fare from <strong>' + raw + '</strong> (' + exact.zone + ') to Heathrow:</div>' +
+                    '<div style="font-size:36px;font-weight:800;color:#1a1a2e">&pound;' + exact.cost.toFixed(2) + '</div>';
+                result.style.display = 'block';
+                return;
+            }}
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('postcode-input').addEventListener('keydown', function(e) {
+            let match = null;
+            let matchLen = 0;
+            for (const key of Object.keys(FARES)) {{
+                if (raw.startsWith(key) && key.length > matchLen) {{
+                    match = key;
+                    matchLen = key.length;
+                }}
+            }}
+            if (match) {{
+                const f = FARES[match];
+                result.style.background = '#d4edda';
+                result.style.color = '#155724';
+                result.innerHTML = '<div style="font-size:14px;margin-bottom:4px">Fare from <strong>' + match + '</strong> (' + f.zone + ') to Heathrow:</div>' +
+                    '<div style="font-size:36px;font-weight:800;color:#1a1a2e">&pound;' + f.cost.toFixed(2) + '</div>';
+            }} else {{
+                result.style.background = '#fff3cd';
+                result.style.color = '#856404';
+                result.innerHTML = 'No fare data for "' + raw + '". Try a shorter prefix like SW1 or N1.';
+            }}
+            result.style.display = 'block';
+        }}
+
+        document.addEventListener('DOMContentLoaded', function() {{
+            document.getElementById('postcode-input').addEventListener('keydown', function(e) {{
                 if (e.key === 'Enter') lookupFare();
-            });
-        });
+            }});
+        }});
         </script>
         """
 
