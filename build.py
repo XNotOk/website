@@ -610,8 +610,9 @@ class FareCabPage(Component):
 
 if __name__ == "__main__":
     app = App(root=FareCabPage(), title="Fare-Cab | London Black Cab Fares")
-    app.doc.add_head_link('<link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32">')
-    app.doc.add_head_link('<link rel="icon" type="image/x-icon" href="favicon.ico" sizes="32x32">')
+    app.doc.add_head_link('<link rel="icon" type="image/png" href="favicon-48.png" sizes="48x48">')
+    app.doc.add_head_link('<link rel="icon" type="image/png" href="favicon-96.png" sizes="96x96">')
+    app.doc.add_head_link('<link rel="icon" type="image/x-icon" href="favicon.ico" sizes="48x48">')
     app.doc.add_style(global_styles())
     output_dir = os.path.dirname(os.path.abspath(__file__))
     output_path = os.path.join(output_dir, "index.html")
