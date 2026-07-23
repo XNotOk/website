@@ -1,24 +1,16 @@
 # Fare-Cab
 
-London black cab fare lookup site for fare-cab.co.uk.
+London black cab fare lookup site — know your Heathrow fare before you ride.
 
 ## Quick start
 
 ```bash
-# Seed the fares database
-python3 seed.py
-
-# Build the frontend HTML
-python3 build.py
-
-# Start the server
-python3 server.py
+python3 seed.py   # populate fares database
+python3 build.py  # generate index.html
 ```
 
-Open http://localhost:8080 and enter a London postcode area (e.g. SW1, N1, TW6) to see the Heathrow fare.
+Open `index.html` in a browser, or serve with any static file server.
 
-## Stack
+## How it works
 
-- **Frontend**: pyfront — generates static HTML with scoped CSS
-- **Backend**: pyback — HTTP server with RPC bridge
-- **Database**: SQLite with postcode prefix -> Heathrow fare mappings
+Enter a London postcode area (e.g. SW1, N1, TW6) and the page instantly returns the fixed fare to Heathrow Airport. All fare data is embedded client-side — no server required.
