@@ -34,14 +34,22 @@ class Header(Component):
     def render(self) -> str:
         s = Style({
             "background": NAVY,
-            "padding": "16px 40px",
+            "padding": "12px 40px",
             "display": "flex",
             "align-items": "center",
             "justify-content": "space-between",
         })
+        logo_wrap = Style({
+            "background": WHITE,
+            "border-radius": "8px",
+            "padding": "4px 8px",
+            "display": "inline-flex",
+            "align-items": "center",
+        })
         logo_s = Style({
-            "height": "36px",
+            "height": "40px",
             "width": "auto",
+            "display": "block",
         })
         nav_s = Style({
             "display": "flex",
@@ -66,7 +74,7 @@ class Header(Component):
             ":hover": {"background": "#e89f2c"},
         })
         return tags.nav(class_=s.class_name)(
-            tags.a(href="#home")(
+            tags.a(href="#home", class_=logo_wrap.class_name)(
                 tags.img(src="logo.png", alt="Fare-Cab", class_=logo_s.class_name),
             ),
             tags.div(class_=nav_s.class_name)(
@@ -579,10 +587,18 @@ class Footer(Component):
             "padding": "40px 40px 24px",
             "text-align": "center",
         })
+        logo_wrap_f = Style({
+            "background": WHITE,
+            "border-radius": "6px",
+            "padding": "3px 6px",
+            "display": "inline-flex",
+            "align-items": "center",
+            "margin-bottom": "8px",
+        })
         logo_s = Style({
             "height": "28px",
             "width": "auto",
-            "margin-bottom": "8px",
+            "display": "block",
         })
         p_s = Style({
             "font-size": "13px",
