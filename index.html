@@ -1,17 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Fare Cab</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <div class="topnav">
-            <a class="active" href="#home">Home</a>
-            <a href="#contact">Contact</a>
-            <a href="#about">About</a>
-            <a href="#quotes">Quotes</a>
-        </div>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fare-Cab | London Black Cab Fares</title>
+    <style>* { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #2d2d2d; line-height: 1.6; background: #f8f9fa; }</style>
+</head>
+<body>
+    <nav class="pf-dfa6348e"><div class="pf-64eaa5ec">Fare-Cab</div><div class="pf-67160d89"><a href="#" class="pf-bd847b27">Home</a><a href="#heathrow" class="pf-bd847b27">Heathrow</a><a href="#" class="pf-bd847b27">All Fares</a><a href="#" class="pf-61aae362">Get a Quote</a></div></nav><section class="pf-72d09e81"><h1 class="pf-f6c5d1ce">London Black Cab Fares</h1><p class="pf-26330842">Know your fare before you ride. Instant Heathrow airport transfer pricing.</p></section><section class="pf-60933d67">
+        <script>
+        async function lookupFare() {
+            const input = document.getElementById('postcode-input');
+            const result = document.getElementById('fare-result');
+            const prefix = input.value.trim().toUpperCase();
+
+            if (!prefix) {
+                result.style.display = 'block';
+                result.style.background = '#fff3cd';
+                result.style.color = '#856404';
+                result.innerHTML = 'Please enter a postcode area (e.g. SW1, N1, TW6)';
+                return;
+            }
+
+            result.innerHTML = '<div style="text-align:center;padding:12px">Looking up fare...</div>';
+            result.style.display = 'block';
+            result.style.background = '#f8f9fa';
+            result.style.color = '#2d2d2d';
+
+            try {
+                const response = await fetch('/api/rpc', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        func: 'get_fare',
+                        args: [prefix],
+                        kwargs: {}
+                    })
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    result.style.background = '#fff3cd';
+                    result.style.color = '#856404';
+                    result.innerHTML = '<strong>Not found:</strong> No fare data for "' + prefix + '". Try a shorter prefix like SW1 or N1.';
+                    return;
+                }
+
+                const fare = data.result;
+                result.style.background = '#d4edda';
+                result.style.color = '#155724';
+                result.innerHTML = '<div style="font-size:14px;margin-bottom:4px">Fare from <strong>' + fare.prefix + '</strong> (' + fare.zone + ') to Heathrow:</div>' +
+                    '<div style="font-size:36px;font-weight:800;color:#1a1a2e">&pound;' + fare.cost.toFixed(2) + '</div>';
+            } catch (e) {
+                result.style.background = '#f8d7da';
+                result.style.color = '#721c24';
+                result.innerHTML = 'Error looking up fare. Is the server running?';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('postcode-input').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') lookupFare();
+            });
+        });
+        </script>
+        <div class="pf-fbf5e10d"><h2 class="pf-a11581a7">Heathrow Fare Lookup</h2><p class="pf-2b8de749">Enter your postcode area to see the fixed fare to Heathrow Airport.</p><div class="pf-f66cd36b">Postcode Area</div><div class="pf-4dc460ca"><input type="text" id="postcode-input" class="pf-32fd1089" placeholder="e.g. SW1, N1, TW6" maxlength="4" style="text-transform: uppercase;" /><button class="pf-a6b592db" onclick="lookupFare()">Check Fare</button></div><div id="fare-result" class="pf-0d9a05da"></div></div></section><section class="pf-4baf46e5"><h2 class="pf-b9e710e0">All Heathrow Fares</h2><div class="pf-c86967a0"><table class="pf-e2e360ce"><thead><tr><th class="pf-f5b05b05">Area</th><th class="pf-f5b05b05">Zone</th><th class="pf-f5b05b05">Fare</th></tr></thead><tbody><tr><td class='pf-251c2c94'><strong>BR1</strong></td><td class='pf-251c2c94'>Bromley</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£55.00</span></td></tr><tr><td class='pf-9880f038'><strong>BR3</strong></td><td class='pf-9880f038'>Beckenham</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£58.00</span></td></tr><tr><td class='pf-251c2c94'><strong>CR0</strong></td><td class='pf-251c2c94'>Croydon</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£45.00</span></td></tr><tr><td class='pf-9880f038'><strong>CR2</strong></td><td class='pf-9880f038'>South Croydon</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£48.00</span></td></tr><tr><td class='pf-251c2c94'><strong>DA1</strong></td><td class='pf-251c2c94'>Dartford</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£65.00</span></td></tr><tr><td class='pf-9880f038'><strong>DA5</strong></td><td class='pf-9880f038'>Bexley</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£68.00</span></td></tr><tr><td class='pf-251c2c94'><strong>E1</strong></td><td class='pf-251c2c94'>Whitechapel</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£52.00</span></td></tr><tr><td class='pf-9880f038'><strong>E14</strong></td><td class='pf-9880f038'>Canary Wharf</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£48.00</span></td></tr><tr><td class='pf-251c2c94'><strong>E15</strong></td><td class='pf-251c2c94'>Stratford</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£50.00</span></td></tr><tr><td class='pf-9880f038'><strong>E2</strong></td><td class='pf-9880f038'>Bethnal Green</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£55.00</span></td></tr><tr><td class='pf-251c2c94'><strong>EC1</strong></td><td class='pf-251c2c94'>Clerkenwell</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£42.00</span></td></tr><tr><td class='pf-9880f038'><strong>EC2</strong></td><td class='pf-9880f038'>City of London</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£40.00</span></td></tr><tr><td class='pf-251c2c94'><strong>EC4</strong></td><td class='pf-251c2c94'>Fleet Street</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£44.00</span></td></tr><tr><td class='pf-9880f038'><strong>EN1</strong></td><td class='pf-9880f038'>Enfield</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£60.00</span></td></tr><tr><td class='pf-251c2c94'><strong>EN3</strong></td><td class='pf-251c2c94'>Enfield Highway</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£62.00</span></td></tr><tr><td class='pf-9880f038'><strong>EN5</strong></td><td class='pf-9880f038'>Barnet</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£58.00</span></td></tr><tr><td class='pf-251c2c94'><strong>HA0</strong></td><td class='pf-251c2c94'>Wembley</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£28.00</span></td></tr><tr><td class='pf-9880f038'><strong>HA1</strong></td><td class='pf-9880f038'>Harrow</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£30.00</span></td></tr><tr><td class='pf-251c2c94'><strong>HA4</strong></td><td class='pf-251c2c94'>Ruislip</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£35.00</span></td></tr><tr><td class='pf-9880f038'><strong>HA5</strong></td><td class='pf-9880f038'>Pinner</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£32.00</span></td></tr><tr><td class='pf-251c2c94'><strong>HA7</strong></td><td class='pf-251c2c94'>Stanmore</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£35.00</span></td></tr><tr><td class='pf-9880f038'><strong>HA9</strong></td><td class='pf-9880f038'>Wembley Park</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£25.00</span></td></tr><tr><td class='pf-251c2c94'><strong>IG1</strong></td><td class='pf-251c2c94'>Ilford</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£60.00</span></td></tr><tr><td class='pf-9880f038'><strong>IG3</strong></td><td class='pf-9880f038'>Seven Kings</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£62.00</span></td></tr><tr><td class='pf-251c2c94'><strong>KT1</strong></td><td class='pf-251c2c94'>Kingston</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£28.00</span></td></tr><tr><td class='pf-9880f038'><strong>KT3</strong></td><td class='pf-9880f038'>New Malden</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£30.00</span></td></tr><tr><td class='pf-251c2c94'><strong>KT6</strong></td><td class='pf-251c2c94'>Surbiton</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£32.00</span></td></tr><tr><td class='pf-9880f038'><strong>N1</strong></td><td class='pf-9880f038'>Islington</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£58.00</span></td></tr><tr><td class='pf-251c2c94'><strong>N19</strong></td><td class='pf-251c2c94'>Archway</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£65.00</span></td></tr><tr><td class='pf-9880f038'><strong>N5</strong></td><td class='pf-9880f038'>Highbury</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£60.00</span></td></tr><tr><td class='pf-251c2c94'><strong>N7</strong></td><td class='pf-251c2c94'>Holloway</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£62.00</span></td></tr><tr><td class='pf-9880f038'><strong>NW1</strong></td><td class='pf-9880f038'>Camden</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£50.00</span></td></tr><tr><td class='pf-251c2c94'><strong>NW3</strong></td><td class='pf-251c2c94'>Hampstead</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£52.00</span></td></tr><tr><td class='pf-9880f038'><strong>NW5</strong></td><td class='pf-9880f038'>Kentish Town</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£55.00</span></td></tr><tr><td class='pf-251c2c94'><strong>NW8</strong></td><td class='pf-251c2c94'>St John's Wood</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£48.00</span></td></tr><tr><td class='pf-9880f038'><strong>RM1</strong></td><td class='pf-9880f038'>Romford</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£70.00</span></td></tr><tr><td class='pf-251c2c94'><strong>RM3</strong></td><td class='pf-251c2c94'>Harold Hill</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£72.00</span></td></tr><tr><td class='pf-9880f038'><strong>SE1</strong></td><td class='pf-9880f038'>South Bank</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£48.00</span></td></tr><tr><td class='pf-251c2c94'><strong>SE11</strong></td><td class='pf-251c2c94'>Lambeth</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£50.00</span></td></tr><tr><td class='pf-9880f038'><strong>SE15</strong></td><td class='pf-9880f038'>Peckham</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£55.00</span></td></tr><tr><td class='pf-251c2c94'><strong>SE5</strong></td><td class='pf-251c2c94'>Camberwell</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£52.00</span></td></tr><tr><td class='pf-9880f038'><strong>SM1</strong></td><td class='pf-9880f038'>Sutton</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£35.00</span></td></tr><tr><td class='pf-251c2c94'><strong>SM5</strong></td><td class='pf-251c2c94'>Carshalton</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£38.00</span></td></tr><tr><td class='pf-9880f038'><strong>SW1</strong></td><td class='pf-9880f038'>Westminster</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£45.00</span></td></tr><tr><td class='pf-251c2c94'><strong>SW11</strong></td><td class='pf-251c2c94'>Battersea</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£55.00</span></td></tr><tr><td class='pf-9880f038'><strong>SW15</strong></td><td class='pf-9880f038'>Putney</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£58.00</span></td></tr><tr><td class='pf-251c2c94'><strong>SW19</strong></td><td class='pf-251c2c94'>Wimbledon</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£52.00</span></td></tr><tr><td class='pf-9880f038'><strong>SW3</strong></td><td class='pf-9880f038'>Knightsbridge</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£48.00</span></td></tr><tr><td class='pf-251c2c94'><strong>SW5</strong></td><td class='pf-251c2c94'>Earl's Court</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£42.00</span></td></tr><tr><td class='pf-9880f038'><strong>SW7</strong></td><td class='pf-9880f038'>South Kensington</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£44.00</span></td></tr><tr><td class='pf-251c2c94'><strong>TW1</strong></td><td class='pf-251c2c94'>Twickenham</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£25.00</span></td></tr><tr><td class='pf-9880f038'><strong>TW3</strong></td><td class='pf-9880f038'>Hounslow</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£22.00</span></td></tr><tr><td class='pf-251c2c94'><strong>TW6</strong></td><td class='pf-251c2c94'>Heathrow</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£12.00</span></td></tr><tr><td class='pf-9880f038'><strong>TW8</strong></td><td class='pf-9880f038'>Brentford</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£18.00</span></td></tr><tr><td class='pf-251c2c94'><strong>TW9</strong></td><td class='pf-251c2c94'>Richmond</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£28.00</span></td></tr><tr><td class='pf-9880f038'><strong>UB1</strong></td><td class='pf-9880f038'>Southall</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£30.00</span></td></tr><tr><td class='pf-251c2c94'><strong>UB3</strong></td><td class='pf-251c2c94'>Hayes</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£20.00</span></td></tr><tr><td class='pf-9880f038'><strong>UB6</strong></td><td class='pf-9880f038'>Greenford</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£25.00</span></td></tr><tr><td class='pf-251c2c94'><strong>W1</strong></td><td class='pf-251c2c94'>West End</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£38.00</span></td></tr><tr><td class='pf-9880f038'><strong>W11</strong></td><td class='pf-9880f038'>Notting Hill</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£42.00</span></td></tr><tr><td class='pf-251c2c94'><strong>W14</strong></td><td class='pf-251c2c94'>West Kensington</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£44.00</span></td></tr><tr><td class='pf-9880f038'><strong>W2</strong></td><td class='pf-9880f038'>Paddington</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£36.00</span></td></tr><tr><td class='pf-251c2c94'><strong>W8</strong></td><td class='pf-251c2c94'>Kensington</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£40.00</span></td></tr><tr><td class='pf-9880f038'><strong>WC1</strong></td><td class='pf-9880f038'>Bloomsbury</td><td class='pf-9880f038'><span class='pf-91fd3d34'>£40.00</span></td></tr><tr><td class='pf-251c2c94'><strong>WC2</strong></td><td class='pf-251c2c94'>Covent Garden</td><td class='pf-251c2c94'><span class='pf-91fd3d34'>£38.00</span></td></tr></tbody></table></div></section><footer class="pf-f03ed30d"><div class="pf-9a8d8f68">Fare-Cab</div><p class="pf-2b6b0f62">Copyright 2026 Fare-Cab. All rights reserved.</p></footer>
+    
+</body>
 </html>
