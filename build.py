@@ -123,7 +123,6 @@ def _header(active: str) -> str:
     links = [
         ("Home", "index.html"),
         ("Heathrow", "heathrow.html"),
-        ("Get a Quote", "quote.html"),
     ]
 
     def nav_link(label: str, href: str) -> str:
