@@ -226,8 +226,8 @@ class HeroSection(Component):
             ":hover": {"background": "#e89f2c"},
         })
         return tags.section(class_=s.class_name)(
-            tags.h1(class_=h1_s.class_name, style={"font-size": "40px"})("London Black Cab Fares"),
-            tags.p(class_=p_s.class_name)(
+            tags.h1(class_=f"{h1_s.class_name} hero-title", style={"font-size": "40px"})("London Black Cab Fares"),
+            tags.p(class_=f"{p_s.class_name} hero-sub")(
                 "Know your fare before you ride. Instant Heathrow airport transfer pricing."
             ),
             tags.a(href="heathrow.html", class_=btn.class_name)("Check Heathrow Fare"),
@@ -321,12 +321,12 @@ def _lookup_card_section(rows=None) -> str:
     if rows is None:
         rows = _get_fares_data()
 
-    return tags.div(class_=card_s.class_name)(
+    return tags.div(class_=f"{card_s.class_name} lookup-card")(
         Raw(_fare_lookup_html(rows)),
         tags.h2(class_=h2_s.class_name)("Heathrow Fare Lookup"),
         tags.p(class_=sub_s.class_name)("Enter your postcode area for the fixed fare to Heathrow."),
         tags.div(class_=label_s.class_name)("Postcode Area"),
-        tags.div(style={"display": "flex", "gap": "12px", "align-items": "center", "flex-wrap": "wrap"})(
+        tags.div(class_="lookup-row", style={"display": "flex", "gap": "12px", "align-items": "center", "flex-wrap": "wrap"})(
             tags.input_(type="text", id="pcode", class_=inp.class_name,
                 placeholder="e.g. SW1, N1, TW6", maxlength="4",
                 style={"text-transform": "uppercase", "flex": "1", "min-width": "140px"}),
@@ -371,7 +371,7 @@ def _fares_table_section(rows=None) -> str:
 
     return tags.div(style={"margin-top": "48px"})(
         tags.h2(class_=h2_s.class_name)("All Heathrow Fares"),
-        tags.div(class_=table_wrap.class_name)(
+        tags.div(class_=f"{table_wrap.class_name} fares-table-wrap")(
             tags.table(class_=table_s.class_name)(
                 tags.thead()(tags.tr()(
                     tags.th(class_=th_s.class_name)("Area"),
@@ -417,30 +417,30 @@ class QuotePage(Component):
             "font-size": "15px", "color": GREY, "margin-bottom": "32px",
         })
         grid_s = Style({
-            "display": "grid", "grid-template-columns": "1fr 1fr", "gap": "18px",
+            "display": "grid", "grid-template-columns": "1fr 1fr", "gap": "24px",
         })
         full_s = Style({"grid-column": "1 / -1"})
         label_s = Style({
             "display": "block", "font-size": "13px",
-            "font-weight": "600", "color": NAVY, "margin-bottom": "6px",
+            "font-weight": "600", "color": NAVY, "margin-bottom": "8px",
         })
         field_s = Style({
-            "width": "100%", "padding": "12px 16px",
+            "width": "100%", "padding": "14px 16px",
             "border": "2px solid #e0e0e0", "border-radius": "10px",
             "font-size": "15px", "outline": "none",
             "transition": "border-color 0.3s",
             ":focus": {"border-color": GOLD},
         })
         ta_s = Style({
-            "width": "100%", "padding": "12px 16px",
+            "width": "100%", "padding": "14px 16px",
             "border": "2px solid #e0e0e0", "border-radius": "10px",
             "font-size": "15px", "outline": "none", "resize": "vertical",
-            "min-height": "90px", "font-family": "inherit",
+            "min-height": "100px", "font-family": "inherit",
             ":focus": {"border-color": GOLD},
         })
         submit_s = Style({
             "background": GOLD, "color": NAVY, "border": "none",
-            "padding": "14px 48px", "border-radius": "50px",
+            "padding": "16px 56px", "border-radius": "50px",
             "font-size": "16px", "font-weight": "700",
             "cursor": "pointer", "transition": "background 0.3s",
             ":hover": {"background": "#e89f2c"},
@@ -448,16 +448,16 @@ class QuotePage(Component):
         success_s = Style({
             "display": "none", "background": "#d4edda", "color": "#155724",
             "padding": "24px", "border-radius": "12px",
-            "margin-top": "24px", "text-align": "center",
+            "margin-top": "32px", "text-align": "center",
         })
         error_s = Style({
             "display": "none", "background": "#f8d7da", "color": "#721c24",
             "padding": "24px", "border-radius": "12px",
-            "margin-top": "24px", "text-align": "center",
+            "margin-top": "32px", "text-align": "center",
         })
         note_s = Style({
-            "text-align": "center", "font-size": "12px",
-            "color": GREY, "margin-top": "16px",
+            "text-align": "center", "font-size": "13px",
+            "color": GREY, "margin-top": "20px",
         })
 
         form = tags.section(class_=section_s.class_name)(
@@ -486,11 +486,11 @@ class QuotePage(Component):
             }
             </script>
             """),
-            tags.div(class_=card_s.class_name)(
+            tags.div(class_=f"{card_s.class_name} quote-card")(
                 tags.h2(class_=h2_s.class_name)("Get a Quote"),
                 tags.p(class_=sub_s.class_name)("Fill in your details for a tailored quote."),
                 tags.form(id="qf", onsubmit="submitQuote(event)")(
-                    tags.div(class_=grid_s.class_name)(
+                    tags.div(class_=f"{grid_s.class_name} quote-grid")(
                         tags.div()(
                             tags.label(class_=label_s.class_name, for_="qn")("Full Name"),
                             tags.input_(type="text", id="qn", class_=field_s.class_name, placeholder="Your name", required="required"),
@@ -528,7 +528,7 @@ class QuotePage(Component):
                             tags.textarea(id="qm", class_=ta_s.class_name, placeholder="Any special requirements..."),
                         ),
                     ),
-                    tags.div(style={"text-align": "center", "margin-top": "28px"})(
+                    tags.div(style={"text-align": "center", "margin-top": "36px"})(
                         tags.button(type="submit", class_=submit_s.class_name)("Request Quote"),
                     ),
                     tags.div(id="qs", class_=success_s.class_name)(
