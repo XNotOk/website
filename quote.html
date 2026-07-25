@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon-48.png" sizes="48x48"><link rel="icon" type="image/png" href="favicon-96.png" sizes="96x96"><link rel="icon" type="image/x-icon" href="favicon.ico" sizes="48x48">
+    <title>Get a Quote | Fare-Cab</title>
+    <style>* { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #2d2d2d; line-height: 1.6; background: #f8f9fa; }
+@media (max-width: 768px) {
+.nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: #1a1a2e; padding: 20px; gap: 16px; z-index: 1000; }
+.nav-links.open { display: flex; }
+.nav-toggle { display: block; }
+.nav-toggle span { display: block; width: 24px; height: 3px; background: #ffffff; margin: 5px 0; border-radius: 2px; transition: all .3s; }
+.hero-title { font-size: 28px !important; }
+.hero-sub { font-size: 15px !important; }
+.lookup-card { padding: 28px 20px !important; }
+.lookup-row { flex-direction: column !important; }
+.quote-card { padding: 28px 20px !important; }
+.quote-grid { grid-template-columns: 1fr !important; }
+.fares-table-wrap { overflow-x: auto !important; }
+}
+@media (min-width: 769px) {
+.nav-toggle { display: none; }
+.nav-links { display: flex !important; }
+}
+</style>
+<style>.pf-ad0eaaaa { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); padding: 80px 24px; text-align: center; } 
+.pf-1ff9defa { font-size: 40px; font-weight: 800; color: #ffffff; max-width: 600px; margin: 0 auto 16px; line-height: 1.2; } 
+.pf-19fada97 { font-size: 18px; color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto 32px; } 
+.pf-fe93c050 { display: inline-block; background: #fbb13c; color: #1a1a2e; padding: 14px 36px; border-radius: 50px; font-size: 16px; font-weight: 700; text-decoration: none; transition: background 0.3s; } .pf-fe93c050:hover { background: #e89f2c; }
+.pf-67049fc1 { padding: 60px 24px; max-width: 900px; margin: 0 auto; } 
+.pf-47643b28 { font-size: 28px; font-weight: 700; color: #1a1a2e; text-align: center; margin-bottom: 40px; } 
+.pf-a426d643 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; } 
+.pf-ef06d39d { background: #ffffff; padding: 28px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: center; } 
+.pf-20195c63 { font-size: 32px; margin-bottom: 12px; } 
+.pf-ab2307c6 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; } 
+.pf-8b8800df { font-size: 13px; color: #6c757d; line-height: 1.6; } 
+.pf-1504d279 { background: #1a1a2e; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: relative; } 
+.pf-ad678292 { background: #ffffff; border-radius: 8px; padding: 4px 14px 4px 4px; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; } 
+.pf-19cdc2f0 { height: 36px; width: auto; display: block; } 
+.pf-db6f24de { font-family: 'Times New Roman', Times, serif; font-size: 20px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.5px; } 
+.pf-901da50d { color: #ffffff; font-size: 14px; font-weight: 500; padding: 6px 0; text-decoration: none; transition: color 0.3s; } .pf-901da50d:hover { color: #fbb13c; }
+.pf-6b4caa0c { color: #fbb13c; font-size: 14px; font-weight: 600; padding: 6px 0; text-decoration: none; border-bottom: 2px solid #fbb13c; } 
+.pf-d33b09c8 { background: #fbb13c; color: #1a1a2e; padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 700; text-decoration: none; transition: background 0.3s; } .pf-d33b09c8:hover { background: #e89f2c; }
+.pf-df01ed4a { background: #1a1a2e; color: #ffffff; padding: 32px 24px 20px; text-align: center; } 
+.pf-5fcde384 { background: #ffffff; border-radius: 6px; padding: 3px 6px; display: inline-flex; align-items: center; margin-bottom: 8px; } 
+.pf-787fdebc { height: 24px; width: auto; display: block; } 
+.pf-9a309d29 { color: rgba(255,255,255,0.6); font-size: 13px; text-decoration: none; margin: 0 10px; transition: color 0.3s; } .pf-9a309d29:hover { color: #fbb13c; }
+.pf-4c29e774 { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 12px; } 
+.pf-1a887385 { padding: 60px 24px; max-width: 800px; margin: 0 auto; } 
+.pf-fbf5e10d { background: #ffffff; border-radius: 20px; padding: 48px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); } 
+.pf-a11581a7 { font-size: 28px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; } 
+.pf-2b8de749 { font-size: 15px; color: #6c757d; margin-bottom: 32px; } 
+.pf-f66cd36b { font-size: 14px; font-weight: 600; color: #1a1a2e; display: block; margin-bottom: 8px; } 
+.pf-32fd1089 { flex: 1; padding: 14px 20px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 18px; font-weight: 600; outline: none; transition: border-color 0.3s; text-transform: uppercase; } .pf-32fd1089:focus { border-color: #fbb13c; }
+.pf-b61d4ce0 { background: #fbb13c; color: #1a1a2e; border: none; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.3s; } .pf-b61d4ce0:hover { background: #e89f2c; }
+.pf-0d9a05da { margin-top: 32px; padding: 24px; border-radius: 12px; display: none; } 
+.pf-199b994a { background: #ffffff; border-radius: 16px; overflow-x: auto; box-shadow: 0 4px 24px rgba(0,0,0,0.06); } 
+.pf-9bdaa2aa { width: 100%; border-collapse: collapse; min-width: 300px; } 
+.pf-ae51d6bd { background: #1a1a2e; color: #ffffff; padding: 12px 16px; text-align: left; font-size: 13px; font-weight: 600; } 
+.pf-88255b17 { padding: 10px 16px; border-bottom: 1px solid #e9ecef; font-size: 13px; } 
+.pf-e806d685 { background: #f8f9fa; padding: 10px 16px; border-bottom: 1px solid #e9ecef; font-size: 13px; } 
+.pf-91fd3d34 { font-weight: 700; color: #1a1a2e; } 
+.pf-0c81e664 { padding: 60px 24px; max-width: 700px; margin: 0 auto; } 
+.pf-d390d37a { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; } 
+.pf-4d57512a { grid-column: 1 / -1; } 
+.pf-8df34819 { display: block; font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; } 
+.pf-6e9d4565 { width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; outline: none; transition: border-color 0.3s; } .pf-6e9d4565:focus { border-color: #fbb13c; }
+.pf-39be1c6d { width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; outline: none; resize: vertical; min-height: 90px; font-family: inherit; } .pf-39be1c6d:focus { border-color: #fbb13c; }
+.pf-28e26cb1 { background: #fbb13c; color: #1a1a2e; border: none; padding: 14px 48px; border-radius: 50px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.3s; } .pf-28e26cb1:hover { background: #e89f2c; }
+.pf-39a5abfa { display: none; background: #d4edda; color: #155724; padding: 24px; border-radius: 12px; margin-top: 24px; text-align: center; } 
+.pf-2c2cd995 { display: none; background: #f8d7da; color: #721c24; padding: 24px; border-radius: 12px; margin-top: 24px; text-align: center; } 
+.pf-f032d3ba { text-align: center; font-size: 12px; color: #6c757d; margin-top: 16px; } </style>
+</head>
+<body>
+    
+    <script>
+    function toggleNav() {
+        document.getElementById('nav-links').classList.toggle('open');
+    }
+    </script>
+    <nav class="pf-1504d279"><a href="index.html" class="pf-ad678292"><img src="logo.png" alt="Fare-Cab" class="pf-19cdc2f0" /><span class="pf-db6f24de">Fare Cab</span></a><div class="nav-toggle" onclick="toggleNav()"><span></span><span></span><span></span></div><div id="nav-links" class="nav-links"><a href="index.html" class="pf-901da50d">Home</a><a href="heathrow.html" class="pf-901da50d">Heathrow</a><a href="quote.html" class="pf-6b4caa0c">Get a Quote</a><a href="quote.html" class="pf-d33b09c8">Get a Quote</a></div></nav><section class="pf-0c81e664">
+            <script>
+            async function submitQuote(e) {
+                e.preventDefault();
+                var f=document.getElementById('qf'),b=f.querySelector('button[type=submit]'),
+                    s=document.getElementById('qs'),er=document.getElementById('qerr');
+                b.disabled=true; b.textContent='Sending...';
+                try {
+                    var r=await fetch('https://formspree.io/f/mwvgrlde',{
+                        method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+                        body:JSON.stringify({
+                            name:document.getElementById('qn').value,email:document.getElementById('qemail').value,
+                            phone:document.getElementById('qp').value,passengers:document.getElementById('qpa').value,
+                            pickup:document.getElementById('qpu').value,destination:document.getElementById('qd').value,
+                            date:document.getElementById('qdt').value,message:document.getElementById('qm').value
+                        })
+                    });
+                    if(r.ok){s.style.display='block';er.style.display='none';f.reset();}
+                    else{er.style.display='block';s.style.display='none';}
+                }catch(e){er.style.display='block';s.style.display='none';}
+                b.disabled=false; b.textContent='Request Quote';
+                s.scrollIntoView({behavior:'smooth'});
+            }
+            </script>
+            <div class="pf-fbf5e10d"><h2 class="pf-a11581a7">Get a Quote</h2><p class="pf-2b8de749">Fill in your details for a tailored quote.</p><form id="qf" onsubmit="submitQuote(event)"><div class="pf-d390d37a"><div><label class="pf-8df34819" for="qn">Full Name</label><input type="text" id="qn" class="pf-6e9d4565" placeholder="Your name" required="required" /></div><div><label class="pf-8df34819" for="qemail">Email</label><input type="email" id="qemail" class="pf-6e9d4565" placeholder="your@email.com" required="required" /></div><div><label class="pf-8df34819" for="qp">Phone</label><input type="tel" id="qp" class="pf-6e9d4565" placeholder="07700 900000" /></div><div><label class="pf-8df34819" for="qpa">Passengers</label><input type="number" id="qpa" class="pf-6e9d4565" placeholder="2" min="1" max="8" /></div><div class="pf-4d57512a"><label class="pf-8df34819" for="qpu">Pickup Postcode</label><input type="text" id="qpu" class="pf-6e9d4565" placeholder="e.g. SW1A 1AA" required="required" /></div><div class="pf-4d57512a"><label class="pf-8df34819" for="qd">Destination</label><input type="text" id="qd" class="pf-6e9d4565" placeholder="e.g. Heathrow Airport, T5" value="Heathrow Airport" /></div><div class="pf-4d57512a"><label class="pf-8df34819" for="qdt">Travel Date &amp; Time</label><input type="datetime-local" id="qdt" class="pf-6e9d4565" /></div><div class="pf-4d57512a"><label class="pf-8df34819" for="qm">Notes</label><textarea id="qm" class="pf-39be1c6d" placeholder="Any special requirements..."></textarea></div></div><div style="text-align: center; margin-top: 28px;"><button type="submit" class="pf-28e26cb1">Request Quote</button></div><div id="qs" class="pf-39a5abfa">Thank you! We&#x27;ll be in touch shortly.</div><div id="qerr" class="pf-2c2cd995">Something went wrong. Try again or email us.</div><p class="pf-f032d3ba">Your data is kept secure. By submitting you agree to our privacy policy.</p></form></div></section><footer class="pf-df01ed4a"><div class="pf-5fcde384"><img src="logo.png" alt="Fare-Cab" class="pf-787fdebc" /></div><div style="margin-top: 8px;"><a href="index.html" class="pf-9a309d29">Home</a><a href="heathrow.html" class="pf-9a309d29">Heathrow</a><a href="quote.html" class="pf-9a309d29">Get a Quote</a></div><p class="pf-4c29e774">Copyright 2026 Fare-Cab. All rights reserved.</p></footer>
+    
+</body>
+</html>
