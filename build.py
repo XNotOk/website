@@ -26,7 +26,7 @@ def global_styles() -> str:
     }
     return dict_to_css({"*": {"margin": "0", "padding": "0", "box-sizing": "border-box"}, "body": base}) + f"""
 @media (max-width: 768px) {{
-.nav-links {{ display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: {NAVY}; padding: 20px; gap: 16px; z-index: 1000; }}
+.nav-links {{ display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: {NAVY}; padding: 20px; gap: 20px; z-index: 1000; }}
 .nav-links.open {{ display: flex; }}
 .nav-toggle {{ display: block; }}
 .nav-toggle span {{ display: block; width: 24px; height: 3px; background: {WHITE}; margin: 5px 0; border-radius: 2px; transition: all .3s; }}
@@ -40,7 +40,7 @@ def global_styles() -> str:
 }}
 @media (min-width: 769px) {{
 .nav-toggle {{ display: none; }}
-.nav-links {{ display: flex !important; gap: 24px; align-items: center; }}
+.nav-links {{ display: flex !important; gap: 32px; align-items: center; }}
 }}
 """
 
@@ -64,7 +64,7 @@ def page_wrapper(current_page: str, body: str) -> str:
 def _header(active: str) -> str:
     s = Style({
         "background": NAVY,
-        "padding": "12px 24px",
+        "padding": "12px 32px",
         "display": "flex",
         "align-items": "center",
         "justify-content": "space-between",
@@ -95,7 +95,7 @@ def _header(active: str) -> str:
         "color": WHITE,
         "font-size": "14px",
         "font-weight": "500",
-        "padding": "6px 0",
+        "padding": "8px 0",
         "text-decoration": "none",
         "transition": "color 0.3s",
         ":hover": {"color": GOLD},
@@ -103,15 +103,14 @@ def _header(active: str) -> str:
     link_active = Style({
         "color": GOLD,
         "font-size": "14px",
-        "font-weight": "600",
-        "padding": "6px 0",
+        "font-weight": "500",
+        "padding": "8px 0",
         "text-decoration": "none",
-        "border-bottom": f"2px solid {GOLD}",
     })
     btn = Style({
         "background": GOLD,
         "color": NAVY,
-        "padding": "8px 20px",
+        "padding": "8px 24px",
         "border-radius": "50px",
         "font-size": "13px",
         "font-weight": "700",

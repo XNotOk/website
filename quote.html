@@ -7,7 +7,7 @@
     <title>Get a Quote | Fare-Cab</title>
     <style>* { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #2d2d2d; line-height: 1.6; background: #f8f9fa; }
 @media (max-width: 768px) {
-.nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: #1a1a2e; padding: 20px; gap: 16px; z-index: 1000; }
+.nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: #1a1a2e; padding: 20px; gap: 20px; z-index: 1000; }
 .nav-links.open { display: flex; }
 .nav-toggle { display: block; }
 .nav-toggle span { display: block; width: 24px; height: 3px; background: #ffffff; margin: 5px 0; border-radius: 2px; transition: all .3s; }
@@ -21,7 +21,7 @@
 }
 @media (min-width: 769px) {
 .nav-toggle { display: none; }
-.nav-links { display: flex !important; gap: 24px; align-items: center; }
+.nav-links { display: flex !important; gap: 32px; align-items: center; }
 }
 </style>
 <style>.pf-1a887385 { padding: 60px 24px; max-width: 800px; margin: 0 auto; } 
@@ -36,13 +36,13 @@
 .pf-1ff9defa { font-size: 40px; font-weight: 800; color: #ffffff; max-width: 600px; margin: 0 auto 16px; line-height: 1.2; } 
 .pf-19fada97 { font-size: 18px; color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto 32px; } 
 .pf-fe93c050 { display: inline-block; background: #fbb13c; color: #1a1a2e; padding: 14px 36px; border-radius: 50px; font-size: 16px; font-weight: 700; text-decoration: none; transition: background 0.3s; } .pf-fe93c050:hover { background: #e89f2c; }
-.pf-1504d279 { background: #1a1a2e; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: relative; } 
+.pf-78eaae21 { background: #1a1a2e; padding: 12px 32px; display: flex; align-items: center; justify-content: space-between; position: relative; } 
 .pf-ad678292 { background: #ffffff; border-radius: 8px; padding: 4px 14px 4px 4px; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; } 
 .pf-19cdc2f0 { height: 36px; width: auto; display: block; } 
 .pf-db6f24de { font-family: 'Times New Roman', Times, serif; font-size: 20px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.5px; } 
-.pf-901da50d { color: #ffffff; font-size: 14px; font-weight: 500; padding: 6px 0; text-decoration: none; transition: color 0.3s; } .pf-901da50d:hover { color: #fbb13c; }
-.pf-6b4caa0c { color: #fbb13c; font-size: 14px; font-weight: 600; padding: 6px 0; text-decoration: none; border-bottom: 2px solid #fbb13c; } 
-.pf-d33b09c8 { background: #fbb13c; color: #1a1a2e; padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 700; text-decoration: none; transition: background 0.3s; } .pf-d33b09c8:hover { background: #e89f2c; }
+.pf-ea7c2ae4 { color: #ffffff; font-size: 14px; font-weight: 500; padding: 8px 0; text-decoration: none; transition: color 0.3s; } .pf-ea7c2ae4:hover { color: #fbb13c; }
+.pf-c672b7ba { color: #fbb13c; font-size: 14px; font-weight: 500; padding: 8px 0; text-decoration: none; } 
+.pf-2a8c8ec6 { background: #fbb13c; color: #1a1a2e; padding: 8px 24px; border-radius: 50px; font-size: 13px; font-weight: 700; text-decoration: none; transition: background 0.3s; } .pf-2a8c8ec6:hover { background: #e89f2c; }
 .pf-df01ed4a { background: #1a1a2e; color: #ffffff; padding: 32px 24px 20px; text-align: center; } 
 .pf-5fcde384 { background: #ffffff; border-radius: 6px; padding: 3px 6px; display: inline-flex; align-items: center; margin-bottom: 8px; } 
 .pf-787fdebc { height: 24px; width: auto; display: block; } 
@@ -72,7 +72,7 @@
         document.getElementById('nav-links').classList.toggle('open');
     }
     </script>
-    <nav class="pf-1504d279"><a href="index.html" class="pf-ad678292"><img src="logo.png" alt="Fare-Cab" class="pf-19cdc2f0" /><span class="pf-db6f24de">Fare Cab</span></a><div class="nav-toggle" onclick="toggleNav()"><span></span><span></span><span></span></div><div id="nav-links" class="nav-links"><a href="index.html" class="pf-901da50d">Home</a><a href="heathrow.html" class="pf-901da50d">Heathrow</a><a href="quote.html" class="pf-d33b09c8">Get a Quote</a></div></nav><section class="pf-0c81e664">
+    <nav class="pf-78eaae21"><a href="index.html" class="pf-ad678292"><img src="logo.png" alt="Fare-Cab" class="pf-19cdc2f0" /><span class="pf-db6f24de">Fare Cab</span></a><div class="nav-toggle" onclick="toggleNav()"><span></span><span></span><span></span></div><div id="nav-links" class="nav-links"><a href="index.html" class="pf-ea7c2ae4">Home</a><a href="heathrow.html" class="pf-ea7c2ae4">Heathrow</a><a href="quote.html" class="pf-2a8c8ec6">Get a Quote</a></div></nav><section class="pf-0c81e664">
             <script>
             async function submitQuote(e) {
                 e.preventDefault();
