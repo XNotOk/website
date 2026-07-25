@@ -40,7 +40,7 @@ def global_styles() -> str:
 }}
 @media (min-width: 769px) {{
 .nav-toggle {{ display: none; }}
-.nav-links {{ display: flex !important; }}
+.nav-links {{ display: flex !important; gap: 24px; align-items: center; }}
 }}
 """
 
@@ -236,208 +236,168 @@ class HeroSection(Component):
         ).render()
 
 
-class Features(Component):
-    def render(self) -> str:
-        s = Style({
-            "padding": "60px 24px",
-            "max-width": "900px",
-            "margin": "0 auto",
-        })
-        h2_s = Style({
-            "font-size": "28px",
-            "font-weight": "700",
-            "color": NAVY,
-            "text-align": "center",
-            "margin-bottom": "40px",
-        })
-        grid_s = Style({
-            "display": "grid",
-            "grid-template-columns": "repeat(auto-fit, minmax(220px, 1fr))",
-            "gap": "24px",
-        })
-        card_s = Style({
-            "background": WHITE,
-            "padding": "28px",
-            "border-radius": "16px",
-            "box-shadow": "0 4px 20px rgba(0,0,0,0.06)",
-            "text-align": "center",
-        })
-        icon_s = Style({"font-size": "32px", "margin-bottom": "12px"})
-        title_s = Style({
-            "font-size": "16px", "font-weight": "700", "color": NAVY, "margin-bottom": "8px",
-        })
-        desc_s = Style({"font-size": "13px", "color": GREY, "line-height": "1.6"})
+def _get_fares_data():
+    from fares_db import get_conn
+    with get_conn() as conn:
+        return conn.execute(
+            "SELECT postcode_prefix, cost, zone FROM fares ORDER BY postcode_prefix"
+        ).fetchall()
 
-        features = [
-            ("🚖", "Fixed Fares", "Know the exact cost before you travel. No surprises."),
-            ("✈️", "Airport Transfers", "Heathrow, Gatwick, Stansted, Luton, City Airport."),
-            ("📱", "Instant Quote", "Enter your postcode and get your fare in seconds."),
-            ("💳", "Pay in Cab", "Cash or card accepted. No online payment needed."),
-        ]
-        cards = "".join(
-            tags.div(class_=card_s.class_name)(
-                tags.div(class_=icon_s.class_name)(icon),
-                tags.div(class_=title_s.class_name)(title),
-                tags.div(class_=desc_s.class_name)(desc),
-            ).render()
-            for icon, title, desc in features
+
+def _fares_js_obj(rows) -> str:
+    items = [f'"{p}":{{"cost":{c},"zone":"{z}"}}' for p, c, z in rows]
+    return "{" + ",".join(items) + "}"
+
+
+def _fare_lookup_html(rows) -> str:
+    return f"""
+    <script>
+    const FARES = {_fares_js_obj(rows)};
+    function lookupFare() {{
+        const input = document.getElementById('pcode');
+        const result = document.getElementById('fresult');
+        const raw = input.value.trim().toUpperCase();
+        if (!raw) {{
+            result.style.display = 'block'; result.style.background = '#fff3cd'; result.style.color = '#856404';
+            result.innerHTML = 'Enter a postcode area like SW1 or N1.'; return;
+        }}
+        const exact = FARES[raw];
+        if (exact) {{
+            result.style.background = '#d4edda'; result.style.color = '#155724';
+            result.innerHTML = '<div style="font-size:14px">Fare from <strong>'+raw+'</strong> ('+exact.zone+') to Heathrow:</div>' +
+                '<div style="font-size:36px;font-weight:800;color:#1a1a2e">\u00a3'+exact.cost.toFixed(2)+'</div>';
+            result.style.display = 'block'; return;
+        }}
+        let match=null, ml=0;
+        for(const k of Object.keys(FARES)) {{ if(raw.startsWith(k)&&k.length>ml){{ match=k;ml=k.length; }} }}
+        if(match) {{
+            const f=FARES[match];
+            result.style.background='#d4edda'; result.style.color='#155724';
+            result.innerHTML='<div style="font-size:14px">Fare from <strong>'+match+'</strong> ('+f.zone+') to Heathrow:</div>'+
+                '<div style="font-size:36px;font-weight:800;color:#1a1a2e">\u00a3'+f.cost.toFixed(2)+'</div>';
+        }} else {{
+            result.style.background='#fff3cd'; result.style.color='#856404';
+            result.innerHTML='No fare data for "'+raw+'". Try SW1 or N1.';
+        }}
+        result.style.display='block';
+    }}
+    document.addEventListener('DOMContentLoaded',function(){{
+        document.getElementById('pcode').addEventListener('keydown',function(e){{if(e.key==='Enter')lookupFare();}});
+    }});
+    </script>"""
+
+
+def _lookup_card_section(rows=None) -> str:
+    card_s = Style({
+        "background": WHITE, "border-radius": "20px",
+        "padding": "48px", "box-shadow": "0 8px 40px rgba(0,0,0,0.08)",
+    })
+    h2_s = Style({
+        "font-size": "28px", "font-weight": "700", "color": NAVY, "margin-bottom": "8px",
+    })
+    sub_s = Style({
+        "font-size": "15px", "color": GREY, "margin-bottom": "32px",
+    })
+    label_s = Style({
+        "font-size": "14px", "font-weight": "600", "color": NAVY,
+        "display": "block", "margin-bottom": "8px",
+    })
+    inp = Style({
+        "flex": "1", "padding": "14px 20px", "border": "2px solid #e0e0e0",
+        "border-radius": "12px", "font-size": "18px", "font-weight": "600",
+        "outline": "none", "transition": "border-color 0.3s",
+        ":focus": {"border-color": GOLD}, "text-transform": "uppercase",
+    })
+    btn = Style({
+        "background": GOLD, "color": NAVY, "border": "none",
+        "padding": "14px 28px", "border-radius": "12px",
+        "font-size": "15px", "font-weight": "700", "cursor": "pointer",
+        "white-space": "nowrap", "transition": "background 0.3s",
+        ":hover": {"background": "#e89f2c"},
+    })
+    res = Style({
+        "margin-top": "32px", "padding": "24px",
+        "border-radius": "12px", "display": "none",
+    })
+
+    if rows is None:
+        rows = _get_fares_data()
+
+    return tags.div(class_=card_s.class_name)(
+        Raw(_fare_lookup_html(rows)),
+        tags.h2(class_=h2_s.class_name)("Heathrow Fare Lookup"),
+        tags.p(class_=sub_s.class_name)("Enter your postcode area for the fixed fare to Heathrow."),
+        tags.div(class_=label_s.class_name)("Postcode Area"),
+        tags.div(style={"display": "flex", "gap": "12px", "align-items": "center", "flex-wrap": "wrap"})(
+            tags.input_(type="text", id="pcode", class_=inp.class_name,
+                placeholder="e.g. SW1, N1, TW6", maxlength="4",
+                style={"text-transform": "uppercase", "flex": "1", "min-width": "140px"}),
+            tags.button(class_=btn.class_name, onclick="lookupFare()")("Check Fare"),
+        ),
+        tags.div(id="fresult", class_=res.class_name)(""),
+    ).render()
+
+
+def _fares_table_section(rows=None) -> str:
+    h2_s = Style({
+        "font-size": "28px", "font-weight": "700", "color": NAVY, "margin-bottom": "8px",
+    })
+    table_wrap = Style({
+        "background": WHITE, "border-radius": "16px",
+        "overflow-x": "auto", "box-shadow": "0 4px 24px rgba(0,0,0,0.06)",
+    })
+    table_s = Style({"width": "100%", "border-collapse": "collapse", "min-width": "300px"})
+    th_s = Style({
+        "background": NAVY, "color": WHITE, "padding": "12px 16px",
+        "text-align": "left", "font-size": "13px", "font-weight": "600",
+    })
+    td_s = Style({
+        "padding": "10px 16px", "border-bottom": "1px solid #e9ecef", "font-size": "13px",
+    })
+    td_alt = Style({
+        "background": LIGHT, "padding": "10px 16px",
+        "border-bottom": "1px solid #e9ecef", "font-size": "13px",
+    })
+    cost_s = Style({"font-weight": "700", "color": NAVY})
+
+    if rows is None:
+        rows = _get_fares_data()
+    rows_html = ""
+    for i, (prefix, cost, zone) in enumerate(rows):
+        cls = td_s.class_name if i % 2 == 0 else td_alt.class_name
+        rows_html += (
+            f"<tr><td class='{cls}'><strong>{prefix}</strong></td>"
+            f"<td class='{cls}'>{zone}</td>"
+            f"<td class='{cls}'><span class='{cost_s.class_name}'>\u00a3{cost:.2f}</span></td></tr>"
         )
-        return tags.section(class_=s.class_name)(
-            tags.h2(class_=h2_s.class_name)("Why Fare-Cab?"),
-            tags.div(class_=grid_s.class_name)(Raw(cards)),
-        ).render()
+
+    return tags.div(style={"margin-top": "48px"})(
+        tags.h2(class_=h2_s.class_name)("All Heathrow Fares"),
+        tags.div(class_=table_wrap.class_name)(
+            tags.table(class_=table_s.class_name)(
+                tags.thead()(tags.tr()(
+                    tags.th(class_=th_s.class_name)("Area"),
+                    tags.th(class_=th_s.class_name)("Zone"),
+                    tags.th(class_=th_s.class_name)("Fare"),
+                )),
+                tags.tbody()(Raw(rows_html)),
+            ),
+        ),
+    ).render()
 
 
 class HeathrowPage(Component):
     def render(self) -> str:
+        rows = _get_fares_data()
         section_s = Style({
             "padding": "60px 24px",
             "max-width": "800px",
             "margin": "0 auto",
         })
-        card_s = Style({
-            "background": WHITE,
-            "border-radius": "20px",
-            "padding": "48px",
-            "box-shadow": "0 8px 40px rgba(0,0,0,0.08)",
-        })
-        h2_s = Style({
-            "font-size": "28px", "font-weight": "700", "color": NAVY, "margin-bottom": "8px",
-        })
-        sub_s = Style({
-            "font-size": "15px", "color": GREY, "margin-bottom": "32px",
-        })
-        label_s = Style({
-            "font-size": "14px", "font-weight": "600", "color": NAVY,
-            "display": "block", "margin-bottom": "8px",
-        })
-        inp = Style({
-            "flex": "1",
-            "padding": "14px 20px",
-            "border": "2px solid #e0e0e0",
-            "border-radius": "12px",
-            "font-size": "18px",
-            "font-weight": "600",
-            "outline": "none",
-            "transition": "border-color 0.3s",
-            ":focus": {"border-color": GOLD},
-            "text-transform": "uppercase",
-        })
-        btn = Style({
-            "background": GOLD, "color": NAVY, "border": "none",
-            "padding": "14px 28px", "border-radius": "12px",
-            "font-size": "15px", "font-weight": "700",
-            "cursor": "pointer", "white-space": "nowrap",
-            "transition": "background 0.3s",
-            ":hover": {"background": "#e89f2c"},
-        })
-        res = Style({
-            "margin-top": "32px", "padding": "24px",
-            "border-radius": "12px", "display": "none",
-        })
-
-        from fares_db import get_conn
-        with get_conn() as conn:
-            rows = conn.execute(
-                "SELECT postcode_prefix, cost, zone FROM fares ORDER BY postcode_prefix"
-            ).fetchall()
-        fares_json = []
-        for prefix, cost, zone in rows:
-            fares_json.append(f'"{prefix}":{{"cost":{cost},"zone":"{zone}"}}')
-        fares_js_obj = "{" + ",".join(fares_json) + "}"
-
-        # Table
-        table_wrap = Style({
-            "background": WHITE, "border-radius": "16px",
-            "overflow-x": "auto", "box-shadow": "0 4px 24px rgba(0,0,0,0.06)",
-        })
-        table_s = Style({"width": "100%", "border-collapse": "collapse", "min-width": "300px"})
-        th_s = Style({
-            "background": NAVY, "color": WHITE, "padding": "12px 16px",
-            "text-align": "left", "font-size": "13px", "font-weight": "600",
-        })
-        td_s = Style({
-            "padding": "10px 16px", "border-bottom": "1px solid #e9ecef", "font-size": "13px",
-        })
-        td_alt = Style({
-            "background": LIGHT, "padding": "10px 16px",
-            "border-bottom": "1px solid #e9ecef", "font-size": "13px",
-        })
-        cost_s = Style({"font-weight": "700", "color": NAVY})
-
-        rows_html = ""
-        for i, (prefix, cost, zone) in enumerate(rows):
-            cls = td_s.class_name if i % 2 == 0 else td_alt.class_name
-            rows_html += (
-                f"<tr><td class='{cls}'><strong>{prefix}</strong></td>"
-                f"<td class='{cls}'>{zone}</td>"
-                f"<td class='{cls}'><span class='{cost_s.class_name}'>\u00a3{cost:.2f}</span></td></tr>"
-            )
-
         body = tags.section(class_=section_s.class_name)(
-            Raw(f"""
-            <script>
-            const FARES = {fares_js_obj};
-            function lookupFare() {{
-                const input = document.getElementById('pcode');
-                const result = document.getElementById('fresult');
-                const raw = input.value.trim().toUpperCase();
-                if (!raw) {{
-                    result.style.display = 'block'; result.style.background = '#fff3cd'; result.style.color = '#856404';
-                    result.innerHTML = 'Enter a postcode area like SW1 or N1.'; return;
-                }}
-                const exact = FARES[raw];
-                if (exact) {{
-                    result.style.background = '#d4edda'; result.style.color = '#155724';
-                    result.innerHTML = '<div style="font-size:14px">Fare from <strong>'+raw+'</strong> ('+exact.zone+') to Heathrow:</div>' +
-                        '<div style="font-size:36px;font-weight:800;color:#1a1a2e">\u00a3'+exact.cost.toFixed(2)+'</div>';
-                    result.style.display = 'block'; return;
-                }}
-                let match=null, ml=0;
-                for(const k of Object.keys(FARES)) {{ if(raw.startsWith(k)&&k.length>ml){{ match=k;ml=k.length; }} }}
-                if(match) {{
-                    const f=FARES[match];
-                    result.style.background='#d4edda'; result.style.color='#155724';
-                    result.innerHTML='<div style="font-size:14px">Fare from <strong>'+match+'</strong> ('+f.zone+') to Heathrow:</div>'+
-                        '<div style="font-size:36px;font-weight:800;color:#1a1a2e">\u00a3'+f.cost.toFixed(2)+'</div>';
-                }} else {{
-                    result.style.background='#fff3cd'; result.style.color='#856404';
-                    result.innerHTML='No fare data for "'+raw+'". Try SW1 or N1.';
-                }}
-                result.style.display='block';
-            }}
-            document.addEventListener('DOMContentLoaded',function(){{
-                document.getElementById('pcode').addEventListener('keydown',function(e){{if(e.key==='Enter')lookupFare();}});
-            }});
-            </script>
-            """),
-            tags.div(class_=card_s.class_name)(
-                tags.h2(class_=h2_s.class_name)("Heathrow Fare Lookup"),
-                tags.p(class_=sub_s.class_name)("Enter your postcode area for the fixed fare to Heathrow."),
-                tags.div(class_=label_s.class_name)("Postcode Area"),
-                tags.div(style={"display": "flex", "gap": "12px", "align-items": "center", "flex-wrap": "wrap"})(
-                    tags.input_(type="text", id="pcode", class_=inp.class_name,
-                        placeholder="e.g. SW1, N1, TW6", maxlength="4",
-                        style={"text-transform": "uppercase", "flex": "1", "min-width": "140px"}),
-                    tags.button(class_=btn.class_name, onclick="lookupFare()")("Check Fare"),
-                ),
-                tags.div(id="fresult", class_=res.class_name)(""),
-            ),
-            tags.div(style={"margin-top": "48px"})(
-                tags.h2(class_=h2_s.class_name)("All Heathrow Fares"),
-                tags.div(class_=table_wrap.class_name)(
-                    tags.table(class_=table_s.class_name)(
-                        tags.thead()(tags.tr()(
-                            tags.th(class_=th_s.class_name)("Area"),
-                            tags.th(class_=th_s.class_name)("Zone"),
-                            tags.th(class_=th_s.class_name)("Fare"),
-                        )),
-                        tags.tbody()(Raw(rows_html)),
-                    ),
-                ),
-            ),
+            Raw(_lookup_card_section(rows)),
+            Raw(_fares_table_section(rows)),
         ).render()
-
         return page_wrapper("Heathrow", body)
 
 
@@ -591,8 +551,16 @@ class QuotePage(Component):
 
 class HomePage(Component):
     def render(self) -> str:
+        section_s = Style({
+            "padding": "60px 24px",
+            "max-width": "800px",
+            "margin": "0 auto",
+        })
+        body = tags.section(class_=section_s.class_name)(
+            Raw(_lookup_card_section()),
+        ).render()
         return page_wrapper("Home",
-            HeroSection().render() + Features().render()
+            HeroSection().render() + body
         )
 
 
