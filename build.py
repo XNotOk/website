@@ -188,6 +188,9 @@ def _footer() -> str:
             tags.a(href="heathrow.html", class_=link.class_name)("Heathrow"),
             tags.a(href="quote.html", class_=link.class_name)("Get a Quote"),
         ),
+        tags.p(style={"margin-top": "8px", "font-size": "13px", "color": "rgba(255,255,255,0.6)"})(
+            tags.a(href="mailto:suport@fare-cab.co.uk", style={"color": "#fbb13c", "text-decoration": "none"})("suport@fare-cab.co.uk"),
+        ),
         tags.p(class_=p_s.class_name)("Copyright 2026 Fare-Cab. All rights reserved."),
     ).render()
 
@@ -535,7 +538,7 @@ class QuotePage(Component):
                         "Thank you! We'll be in touch shortly."
                     ),
                     tags.div(id="qerr", class_=error_s.class_name)(
-                        "Something went wrong. Try again or email us."
+                        'Something went wrong. Email us at <a href="mailto:suport@fare-cab.co.uk" style="color:#721c24;font-weight:700;text-decoration:underline">suport@fare-cab.co.uk</a>.'
                     ),
                     tags.p(class_=note_s.class_name)(
                         "Your data is kept secure. By submitting you agree to our privacy policy."
