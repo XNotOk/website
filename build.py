@@ -228,38 +228,44 @@ def _min_fare() -> float:
     return min(cost for _, cost, _ in rows)
 
 
-CAB_SVG = """<svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="London black cab" class="hero-cab">
+def _fare_count() -> int:
+    rows = _get_fares_data()
+    return len(rows)
+
+
+CAB_SVG = """<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a London black cab" class="hero-cab">
 <defs>
   <linearGradient id="pf-cab-body" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="#23262e"/>
-    <stop offset="1" stop-color="#0f1115"/>
+    <stop offset="0" stop-color="#2c313a"/>
+    <stop offset="1" stop-color="#101318"/>
   </linearGradient>
   <linearGradient id="pf-cab-glass" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#8fd3f2"/>
-    <stop offset="1" stop-color="#cdeefb"/>
+    <stop offset="0" stop-color="#9fd8f2"/>
+    <stop offset="1" stop-color="#cdeefc"/>
   </linearGradient>
 </defs>
-<ellipse cx="260" cy="222" rx="210" ry="14" fill="rgba(0,0,0,0.35)"/>
+<ellipse cx="320" cy="324" rx="255" ry="12" fill="rgba(0,0,0,0.22)"/>
 <g>
-  <path d="M66 196 Q58 196 58 188 L58 172 Q58 158 72 158 L96 158 L112 120 Q118 108 132 108 L252 108 Q264 108 274 116 L306 142 Q322 156 342 156 L374 156 Q400 156 400 178 L400 196 Z" fill="url(#pf-cab-body)" stroke="#05060a" stroke-width="2"/>
-  <path d="M96 158 L112 120 Q118 108 132 108 L236 108 Q250 108 260 116 L282 138 Q288 146 298 146 L340 146" fill="none" stroke="#33373f" stroke-width="3"/>
-  <path d="M118 152 L132 118 Q138 108 152 108 L210 108 Q226 108 234 122 L252 148" fill="url(#pf-cab-glass)" stroke="#1c2026" stroke-width="2"/>
-  <path d="M262 148 Q274 130 288 130 L326 130 Q340 130 352 142 L370 152" fill="url(#pf-cab-glass)" stroke="#1c2026" stroke-width="2"/>
-  <rect x="120" y="162" width="266" height="26" rx="8" fill="url(#pf-cab-glass)" stroke="#1c2026" stroke-width="2" opacity="0.85"/>
-  <path d="M220 162 L220 188" stroke="#1c2026" stroke-width="2"/>
-  <rect x="84" y="176" width="22" height="10" rx="4" fill="#e05a4e"/>
-  <rect x="402" y="176" width="26" height="12" rx="5" fill="#fbb13c"/>
-  <rect x="140" y="158" width="110" height="14" rx="7" fill="#fbb13c"/>
-  <circle cx="150" cy="214" r="32" fill="#05060a"/>
-  <circle cx="150" cy="214" r="14" fill="#2b2f37"/>
-  <circle cx="368" cy="214" r="32" fill="#05060a"/>
-  <circle cx="368" cy="214" r="14" fill="#2b2f37"/>
-  <path d="M150 182 L150 214 M150 214 L132 228 M150 214 L168 228" stroke="#1b1e24" stroke-width="3" opacity="0.6"/>
-  <path d="M368 182 L368 214 M368 214 L350 228 M368 214 L386 228" stroke="#1b1e24" stroke-width="3" opacity="0.6"/>
-  <rect x="66" y="120" width="8" height="38" rx="4" fill="#e05a4e"/>
-  <rect x="408" y="118" width="10" height="40" rx="5" fill="#fbb13c"/>
+  <circle cx="185" cy="286" r="44" fill="#0a0c10"/>
+  <circle cx="470" cy="286" r="44" fill="#0a0c10"/>
 </g>
-<text x="260" y="250" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="bold" fill="#fbb13c" letter-spacing="4">FARE CAB</text>
+<g fill="#383e47">
+  <circle cx="185" cy="286" r="19"/>
+  <circle cx="470" cy="286" r="19"/>
+</g>
+<g fill="#0a0c10">
+  <circle cx="185" cy="286" r="7"/>
+  <circle cx="470" cy="286" r="7"/>
+</g>
+<rect x="90" y="200" width="460" height="98" rx="20" fill="url(#pf-cab-body)" stroke="#05060a" stroke-width="2"/>
+<path d="M510 200 H540 Q566 200 570 224 L574 262 Q574 292 546 298 H510 Z" fill="url(#pf-cab-body)" stroke="#05060a" stroke-width="2"/>
+<path d="M150 200 L172 158 Q180 140 202 138 L368 138 Q390 138 400 152 L426 200 Z" fill="url(#pf-cab-body)" stroke="#05060a" stroke-width="2"/>
+<path d="M182 148 H356 Q374 148 382 164 L398 200 H150 Q146 200 148 186 L164 158 Q170 148 182 148 Z" fill="url(#pf-cab-glass)" stroke="#1c2026" stroke-width="2"/>
+<rect x="250" y="120" width="90" height="18" rx="9" fill="#fbb13c"/>
+<circle cx="560" cy="252" r="9" fill="#ffe9b3"/>
+<circle cx="562" cy="250" r="4" fill="#ffffff" opacity="0.8"/>
+<rect x="92" y="250" width="16" height="12" rx="4" fill="#e05a4e"/>
+<path d="M120 244 H500" stroke="#fbb13c" stroke-width="2.5" opacity="0.55" fill="none"/>
 </svg>"""
 
 
@@ -334,7 +340,7 @@ class HeroSection(Component):
                     ),
                     tags.h1(class_=f"{h1_s.class_name} hero-title hero-anim-1", style={"font-size": "44px"})("London Black Cab Fares"),
                     tags.p(class_=f"{p_s.class_name} hero-sub hero-anim-2")(
-                        "Know your fare before you ride. Instant Heathrow airport transfer pricing — fixed, no meter, no surprises."
+                        "Know your fare before you ride. Instant Heathrow airport transfer pricing from a starting price."
                     ),
                     tags.div(class_=f"{cta_row.class_name} hero-anim-2")(
                         tags.a(href="heathrow.html", class_=btn.class_name)("Check Heathrow Fare"),
@@ -346,12 +352,12 @@ class HeroSection(Component):
                             tags.span()("Heathrow fares"),
                         ),
                         tags.div(class_="hero-stat")(
-                            Raw("<b>100+</b>"),
+                            Raw(f"<b>{_fare_count()}</b>"),
                             tags.span()("Postcode areas"),
                         ),
                         tags.div(class_="hero-stat")(
-                            Raw("<b>24/7</b>"),
-                            tags.span()("Always available"),
+                            Raw("<b>Licensed</b>"),
+                            tags.span()("Black cab drivers"),
                         ),
                     ),
                 ),
@@ -392,7 +398,7 @@ def _fare_lookup_html(rows) -> str:
             result.style.background = '#d4edda'; result.style.color = '#155724';
             result.innerHTML = '<div style="font-size:14px">Fares from <strong>'+prefix+'</strong> ('+zone+') to Heathrow:</div>' +
                 '<div style="font-size:36px;font-weight:800;color:#1a1a2e">from \u00a3'+Math.round(f.cost)+'</div>' +
-                '<div style="font-size:12px;margin-top:6px;opacity:.75">Fixed price, no hidden extras.</div>';
+                '<div style="font-size:12px;margin-top:6px;opacity:.75">Fares start here — your exact quote is confirmed when you book.</div>';
             result.style.display = 'block';
         }}
         const exact = FARES[raw];
@@ -539,7 +545,7 @@ class HeathrowPage(Component):
             "margin": "0 auto",
         })
         body = (
-            _page_banner("Heathrow Fares", "Fixed, upfront pricing to Heathrow Airport. Enter your postcode area for your fare from.") +
+            _page_banner("Heathrow Fares", "Clear, upfront pricing to Heathrow Airport. Enter your postcode area to see fares from.") +
             tags.section(class_=section_s.class_name)(
                 Raw(_lookup_card_section(rows)),
                 Raw(_fares_table_section(rows)),
@@ -610,7 +616,7 @@ class QuotePage(Component):
         })
 
         form = (
-            _page_banner("Get a Quote", "Tell us about your journey and we'll confirm your fixed black cab fare.") +
+            _page_banner("Get a Quote", "Tell us about your journey and we'll confirm your black cab fare.") +
             tags.section(class_=section_s.class_name)(
                 Raw("""
                 <script>
@@ -738,8 +744,8 @@ class FeaturesSection(Component):
         cards = "".join([
             card(
                 '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e89f2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
-                "Fixed Fares",
-                "The price you see is the price you pay. No meter, no hidden extras, no surge.",
+                "Fares from a starting price",
+                "Search any London postcode area to see fares to Heathrow before you book.",
             ),
             card(
                 '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e89f2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
@@ -749,12 +755,12 @@ class FeaturesSection(Component):
             card(
                 '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e89f2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
                 "Meet & Greet",
-                "We track your flight and meet you at arrivals, ready to help with your bags.",
+                "Your driver meets you at arrivals and helps you with your bags.",
             ),
             card(
                 '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e89f2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-                "24/7 Availability",
-                "Day or night, weekends and bank holidays — we're always on the road.",
+                "Real-time quotes",
+                "Get an instant quote online — no phone calls, no waiting on hold.",
             ),
         ])
 
@@ -791,7 +797,7 @@ class HowItWorksSection(Component):
 
         steps = [
             ("1", "Enter your postcode", "Type your postcode area — SW1, N1, TW6 — into the lookup box."),
-            ("2", "See your fare instantly", "Get a fixed price in seconds, before you even pick up the phone."),
+            ("2", "See your fare instantly", "Get a 'from' price in seconds, before you even pick up the phone."),
             ("3", "Book your black cab", "Send a quote request and a licensed driver will confirm right away."),
         ]
 
