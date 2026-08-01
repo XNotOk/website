@@ -25,6 +25,27 @@ def global_styles() -> str:
         "background": LIGHT,
     }
     return dict_to_css({"*": {"margin": "0", "padding": "0", "box-sizing": "border-box"}, "body": base}) + f"""
+html {{ scroll-behavior: smooth; }}
+@keyframes pf-fade-up {{ from {{ opacity: 0; transform: translateY(18px); }} to {{ opacity: 1; transform: translateY(0); }} }}
+@keyframes pf-float {{ 0%,100% {{ transform: translateY(0); }} 50% {{ transform: translateY(-10px); }} }}
+.hero-anim {{ animation: pf-fade-up .7s ease both; }}
+.hero-anim-1 {{ animation: pf-fade-up .7s ease .1s both; }}
+.hero-anim-2 {{ animation: pf-fade-up .7s ease .2s both; }}
+.hero-anim-3 {{ animation: pf-fade-up .7s ease .3s both; }}
+.hero-cab {{ animation: pf-float 6s ease-in-out infinite; }}
+.feature-card {{ transition: transform .3s ease, box-shadow .3s ease; }}
+.feature-card:hover {{ transform: translateY(-6px); box-shadow: 0 18px 44px rgba(0,0,0,0.14) !important; }}
+.hero-inner {{ display: flex; align-items: center; gap: 48px; max-width: 1100px; margin: 0 auto; text-align: left; }}
+.hero-text {{ flex: 1; min-width: 0; }}
+.hero-visual {{ flex: 1; min-width: 0; display: flex; justify-content: center; }}
+.hero-cab {{ width: 100%; max-width: 460px; height: auto; display: block; filter: drop-shadow(0 24px 40px rgba(0,0,0,0.45)); }}
+.hero-stats {{ display: flex; gap: 40px; margin-top: 36px; flex-wrap: wrap; }}
+.hero-stat {{ text-align: left; }}
+.hero-stat b {{ display: block; font-size: 26px; color: #fff; line-height: 1.1; }}
+.hero-stat span {{ font-size: 12px; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 1px; }}
+.features-grid {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }}
+.steps-grid {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }}
+.step-num {{ width: 40px; height: 40px; border-radius: 50%; background: {GOLD}; color: {NAVY}; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; margin-bottom: 14px; }}
 @media (max-width: 768px) {{
 .nav-links {{ display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: {NAVY}; padding: 20px; gap: 20px; z-index: 1000; }}
 .nav-links.open {{ display: flex; }}
@@ -32,11 +53,18 @@ def global_styles() -> str:
 .nav-toggle span {{ display: block; width: 24px; height: 3px; background: {WHITE}; margin: 5px 0; border-radius: 2px; transition: all .3s; }}
 .hero-title {{ font-size: 28px !important; }}
 .hero-sub {{ font-size: 15px !important; }}
+.hero-inner {{ flex-direction: column; text-align: center; gap: 24px; }}
+.hero-stats {{ justify-content: center; }}
+.hero-stat {{ text-align: center; }}
+.hero-visual {{ order: -1; }}
+.hero-cab {{ max-width: 300px; }}
 .lookup-card {{ padding: 28px 20px !important; }}
 .lookup-row {{ flex-direction: column !important; }}
 .quote-card {{ padding: 28px 20px !important; }}
 .quote-grid {{ grid-template-columns: 1fr !important; }}
 .fares-table-wrap {{ overflow-x: auto !important; }}
+.features-grid {{ grid-template-columns: 1fr; }}
+.steps-grid {{ grid-template-columns: 1fr; }}
 }}
 @media (min-width: 769px) {{
 .nav-toggle {{ display: none; }}
@@ -200,26 +228,62 @@ def _min_fare() -> float:
     return min(cost for _, cost, _ in rows)
 
 
+CAB_SVG = """<svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="London black cab" class="hero-cab">
+<defs>
+  <linearGradient id="pf-cab-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#23262e"/>
+    <stop offset="1" stop-color="#0f1115"/>
+  </linearGradient>
+  <linearGradient id="pf-cab-glass" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#8fd3f2"/>
+    <stop offset="1" stop-color="#cdeefb"/>
+  </linearGradient>
+</defs>
+<ellipse cx="260" cy="222" rx="210" ry="14" fill="rgba(0,0,0,0.35)"/>
+<g>
+  <path d="M66 196 Q58 196 58 188 L58 172 Q58 158 72 158 L96 158 L112 120 Q118 108 132 108 L252 108 Q264 108 274 116 L306 142 Q322 156 342 156 L374 156 Q400 156 400 178 L400 196 Z" fill="url(#pf-cab-body)" stroke="#05060a" stroke-width="2"/>
+  <path d="M96 158 L112 120 Q118 108 132 108 L236 108 Q250 108 260 116 L282 138 Q288 146 298 146 L340 146" fill="none" stroke="#33373f" stroke-width="3"/>
+  <path d="M118 152 L132 118 Q138 108 152 108 L210 108 Q226 108 234 122 L252 148" fill="url(#pf-cab-glass)" stroke="#1c2026" stroke-width="2"/>
+  <path d="M262 148 Q274 130 288 130 L326 130 Q340 130 352 142 L370 152" fill="url(#pf-cab-glass)" stroke="#1c2026" stroke-width="2"/>
+  <rect x="120" y="162" width="266" height="26" rx="8" fill="url(#pf-cab-glass)" stroke="#1c2026" stroke-width="2" opacity="0.85"/>
+  <path d="M220 162 L220 188" stroke="#1c2026" stroke-width="2"/>
+  <rect x="84" y="176" width="22" height="10" rx="4" fill="#e05a4e"/>
+  <rect x="402" y="176" width="26" height="12" rx="5" fill="#fbb13c"/>
+  <rect x="140" y="158" width="110" height="14" rx="7" fill="#fbb13c"/>
+  <circle cx="150" cy="214" r="32" fill="#05060a"/>
+  <circle cx="150" cy="214" r="14" fill="#2b2f37"/>
+  <circle cx="368" cy="214" r="32" fill="#05060a"/>
+  <circle cx="368" cy="214" r="14" fill="#2b2f37"/>
+  <path d="M150 182 L150 214 M150 214 L132 228 M150 214 L168 228" stroke="#1b1e24" stroke-width="3" opacity="0.6"/>
+  <path d="M368 182 L368 214 M368 214 L350 228 M368 214 L386 228" stroke="#1b1e24" stroke-width="3" opacity="0.6"/>
+  <rect x="66" y="120" width="8" height="38" rx="4" fill="#e05a4e"/>
+  <rect x="408" y="118" width="10" height="40" rx="5" fill="#fbb13c"/>
+</g>
+<text x="260" y="250" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="bold" fill="#fbb13c" letter-spacing="4">FARE CAB</text>
+</svg>"""
+
+
 class HeroSection(Component):
     def render(self) -> str:
         s = Style({
             "background": f"linear-gradient(135deg, {NAVY} 0%, #0f3460 100%)",
             "padding": "80px 24px",
-            "text-align": "center",
+            "position": "relative",
+            "overflow": "hidden",
         })
         h1_s = Style({
-            "font-size": "40px",
+            "font-size": "44px",
             "font-weight": "800",
             "color": WHITE,
-            "max-width": "600px",
-            "margin": "0 auto 16px",
-            "line-height": "1.2",
+            "max-width": "620px",
+            "margin-bottom": "16px",
+            "line-height": "1.15",
         })
         p_s = Style({
-            "font-size": "18px",
+            "font-size": "17px",
             "color": "rgba(255,255,255,0.8)",
             "max-width": "500px",
-            "margin": "0 auto 32px",
+            "margin-bottom": "32px",
         })
         btn = Style({
             "display": "inline-block",
@@ -230,8 +294,21 @@ class HeroSection(Component):
             "font-size": "16px",
             "font-weight": "700",
             "text-decoration": "none",
-            "transition": "background 0.3s",
-            ":hover": {"background": "#e89f2c"},
+            "transition": "background 0.3s, transform 0.3s",
+            ":hover": {"background": "#e89f2c", "transform": "translateY(-2px)"},
+        })
+        btn_ghost = Style({
+            "display": "inline-block",
+            "border": "1px solid rgba(255,255,255,0.5)",
+            "color": WHITE,
+            "padding": "14px 36px",
+            "border-radius": "50px",
+            "font-size": "16px",
+            "font-weight": "700",
+            "text-decoration": "none",
+            "margin-left": "12px",
+            "transition": "background 0.3s, transform 0.3s",
+            ":hover": {"background": "rgba(255,255,255,0.12)", "transform": "translateY(-2px)"},
         })
         badge = Style({
             "display": "inline-block",
@@ -242,15 +319,46 @@ class HeroSection(Component):
             "border-radius": "50px",
             "font-size": "13px",
             "font-weight": "600",
-            "margin-bottom": "20px",
+            "margin-bottom": "24px",
+        })
+        cta_row = Style({
+            "display": "flex",
+            "flex-wrap": "wrap",
+            "gap": "12px",
         })
         return tags.section(class_=s.class_name)(
-            tags.span(class_=badge.class_name)(f"Fares from \u00a3{_min_fare():.0f}"),
-            tags.h1(class_=f"{h1_s.class_name} hero-title", style={"font-size": "40px"})("London Black Cab Fares"),
-            tags.p(class_=f"{p_s.class_name} hero-sub")(
-                "Know your fare before you ride. Instant Heathrow airport transfer pricing."
+            tags.div(class_="hero-inner")(
+                tags.div(class_="hero-text")(
+                    tags.div(class_="hero-anim-1")(
+                        tags.span(class_=badge.class_name)(f"Fares from \u00a3{_min_fare():.0f}"),
+                    ),
+                    tags.h1(class_=f"{h1_s.class_name} hero-title hero-anim-1", style={"font-size": "44px"})("London Black Cab Fares"),
+                    tags.p(class_=f"{p_s.class_name} hero-sub hero-anim-2")(
+                        "Know your fare before you ride. Instant Heathrow airport transfer pricing — fixed, no meter, no surprises."
+                    ),
+                    tags.div(class_=f"{cta_row.class_name} hero-anim-2")(
+                        tags.a(href="heathrow.html", class_=btn.class_name)("Check Heathrow Fare"),
+                        tags.a(href="quote.html", class_=btn_ghost.class_name)("Get a Quote"),
+                    ),
+                    tags.div(class_="hero-stats hero-anim-3")(
+                        tags.div(class_="hero-stat")(
+                            Raw(f"<b>from \u00a3{_min_fare():.0f}</b>"),
+                            tags.span()("Heathrow fares"),
+                        ),
+                        tags.div(class_="hero-stat")(
+                            Raw("<b>100+</b>"),
+                            tags.span()("Postcode areas"),
+                        ),
+                        tags.div(class_="hero-stat")(
+                            Raw("<b>24/7</b>"),
+                            tags.span()("Always available"),
+                        ),
+                    ),
+                ),
+                tags.div(class_="hero-visual hero-anim-3")(
+                    Raw(CAB_SVG),
+                ),
             ),
-            tags.a(href="heathrow.html", class_=btn.class_name)("Check Heathrow Fare"),
         ).render()
 
 
@@ -403,6 +511,25 @@ def _fares_table_section(rows=None) -> str:
     ).render()
 
 
+def _page_banner(title: str, sub: str) -> str:
+    s = Style({
+        "background": f"linear-gradient(135deg, {NAVY} 0%, #0f3460 100%)",
+        "padding": "64px 24px",
+        "text-align": "center",
+    })
+    h1_s = Style({
+        "font-size": "36px", "font-weight": "800", "color": WHITE, "margin-bottom": "10px",
+    })
+    p_s = Style({
+        "font-size": "16px", "color": "rgba(255,255,255,0.8)",
+        "max-width": "560px", "margin": "0 auto",
+    })
+    return tags.section(class_=s.class_name)(
+        tags.h1(class_=f"{h1_s.class_name} hero-anim")(title),
+        tags.p(class_=f"{p_s.class_name} hero-anim-1")(sub),
+    ).render()
+
+
 class HeathrowPage(Component):
     def render(self) -> str:
         rows = _get_fares_data()
@@ -411,10 +538,13 @@ class HeathrowPage(Component):
             "max-width": "800px",
             "margin": "0 auto",
         })
-        body = tags.section(class_=section_s.class_name)(
-            Raw(_lookup_card_section(rows)),
-            Raw(_fares_table_section(rows)),
-        ).render()
+        body = (
+            _page_banner("Heathrow Fares", "Fixed, upfront pricing to Heathrow Airport. Enter your postcode area for your fare from.") +
+            tags.section(class_=section_s.class_name)(
+                Raw(_lookup_card_section(rows)),
+                Raw(_fares_table_section(rows)),
+            ).render()
+        )
         return page_wrapper("Heathrow", body)
 
 
@@ -479,10 +609,12 @@ class QuotePage(Component):
             "color": GREY, "margin-top": "20px",
         })
 
-        form = tags.section(class_=section_s.class_name)(
-            Raw("""
-            <script>
-            async function submitQuote(e) {
+        form = (
+            _page_banner("Get a Quote", "Tell us about your journey and we'll confirm your fixed black cab fare.") +
+            tags.section(class_=section_s.class_name)(
+                Raw("""
+                <script>
+                async function submitQuote(e) {
                 e.preventDefault();
                 var f=document.getElementById('qf'),b=f.querySelector('button[type=submit]'),
                     s=document.getElementById('qs'),er=document.getElementById('qerr');
@@ -562,8 +694,121 @@ class QuotePage(Component):
                 ),
             ),
         ).render()
+        )
 
         return page_wrapper("Get a Quote", form)
+
+
+class FeaturesSection(Component):
+    def render(self) -> str:
+        section_s = Style({
+            "padding": "72px 24px",
+            "max-width": "1100px",
+            "margin": "0 auto",
+        })
+        h2_s = Style({
+            "font-size": "32px", "font-weight": "800", "color": NAVY, "text-align": "center", "margin-bottom": "10px",
+        })
+        sub_s = Style({
+            "font-size": "15px", "color": GREY, "text-align": "center", "max-width": "520px", "margin": "0 auto 8px",
+        })
+        card_s = Style({
+            "background": WHITE, "border-radius": "16px", "padding": "28px 24px",
+            "box-shadow": "0 4px 24px rgba(0,0,0,0.06)",
+        })
+        icon_s = Style({
+            "width": "44px", "height": "44px", "border-radius": "12px",
+            "background": "#fdf1dc", "display": "flex", "align-items": "center", "justify-content": "center",
+            "margin-bottom": "16px",
+        })
+        h3_s = Style({
+            "font-size": "17px", "font-weight": "700", "color": NAVY, "margin-bottom": "8px",
+        })
+        p_s = Style({
+            "font-size": "14px", "color": GREY, "line-height": "1.6",
+        })
+
+        def card(icon, title, text):
+            return tags.div(class_=f"feature-card {card_s.class_name}")(
+                tags.div(class_=icon_s.class_name)(Raw(icon)),
+                tags.h3(class_=h3_s.class_name)(title),
+                tags.p(class_=p_s.class_name)(text),
+            ).render()
+
+        cards = "".join([
+            card(
+                '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e89f2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+                "Fixed Fares",
+                "The price you see is the price you pay. No meter, no hidden extras, no surge.",
+            ),
+            card(
+                '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e89f2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+                "Licensed & Insured",
+                "Fully licensed black cab drivers with professional service and complete peace of mind.",
+            ),
+            card(
+                '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e89f2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+                "Meet & Greet",
+                "We track your flight and meet you at arrivals, ready to help with your bags.",
+            ),
+            card(
+                '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e89f2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+                "24/7 Availability",
+                "Day or night, weekends and bank holidays — we're always on the road.",
+            ),
+        ])
+
+        return tags.section(class_=section_s.class_name)(
+            tags.h2(class_=h2_s.class_name)("Why ride with Fare-Cab?"),
+            tags.p(class_=sub_s.class_name)("The honest way to get to Heathrow — by the people who know London best."),
+            tags.div(class_="features-grid")(Raw(cards)),
+        ).render()
+
+
+class HowItWorksSection(Component):
+    def render(self) -> str:
+        section_s = Style({
+            "padding": "56px 24px 88px",
+            "max-width": "1100px",
+            "margin": "0 auto",
+        })
+        h2_s = Style({
+            "font-size": "32px", "font-weight": "800", "color": NAVY, "text-align": "center", "margin-bottom": "10px",
+        })
+        sub_s = Style({
+            "font-size": "15px", "color": GREY, "text-align": "center", "max-width": "520px", "margin": "0 auto 8px",
+        })
+        card_s = Style({
+            "background": WHITE, "border-radius": "16px", "padding": "28px 24px",
+            "box-shadow": "0 4px 24px rgba(0,0,0,0.06)",
+        })
+        h3_s = Style({
+            "font-size": "17px", "font-weight": "700", "color": NAVY, "margin-bottom": "8px",
+        })
+        p_s = Style({
+            "font-size": "14px", "color": GREY, "line-height": "1.6",
+        })
+
+        steps = [
+            ("1", "Enter your postcode", "Type your postcode area — SW1, N1, TW6 — into the lookup box."),
+            ("2", "See your fare instantly", "Get a fixed price in seconds, before you even pick up the phone."),
+            ("3", "Book your black cab", "Send a quote request and a licensed driver will confirm right away."),
+        ]
+
+        cards = "".join([
+            tags.div(class_=card_s.class_name)(
+                tags.div(class_="step-num")(num),
+                tags.h3(class_=h3_s.class_name)(title),
+                tags.p(class_=p_s.class_name)(text),
+            ).render()
+            for num, title, text in steps
+        ])
+
+        return tags.section(class_=section_s.class_name)(
+            tags.h2(class_=h2_s.class_name)("How it works"),
+            tags.p(class_=sub_s.class_name)("Getting to Heathrow has never been simpler."),
+            tags.div(class_="steps-grid")(Raw(cards)),
+        ).render()
 
 
 class HomePage(Component):
@@ -577,7 +822,7 @@ class HomePage(Component):
             Raw(_lookup_card_section()),
         ).render()
         return page_wrapper("Home",
-            HeroSection().render() + body
+            HeroSection().render() + FeaturesSection().render() + HowItWorksSection().render() + body
         )
 
 

@@ -6,6 +6,27 @@
     <link rel="icon" type="image/png" href="favicon-48.png" sizes="48x48"><link rel="icon" type="image/png" href="favicon-96.png" sizes="96x96"><link rel="icon" type="image/x-icon" href="favicon.ico" sizes="48x48">
     <title>Heathrow Fares | Fare-Cab</title>
     <style>* { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #2d2d2d; line-height: 1.6; background: #f8f9fa; }
+html { scroll-behavior: smooth; }
+@keyframes pf-fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pf-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.hero-anim { animation: pf-fade-up .7s ease both; }
+.hero-anim-1 { animation: pf-fade-up .7s ease .1s both; }
+.hero-anim-2 { animation: pf-fade-up .7s ease .2s both; }
+.hero-anim-3 { animation: pf-fade-up .7s ease .3s both; }
+.hero-cab { animation: pf-float 6s ease-in-out infinite; }
+.feature-card { transition: transform .3s ease, box-shadow .3s ease; }
+.feature-card:hover { transform: translateY(-6px); box-shadow: 0 18px 44px rgba(0,0,0,0.14) !important; }
+.hero-inner { display: flex; align-items: center; gap: 48px; max-width: 1100px; margin: 0 auto; text-align: left; }
+.hero-text { flex: 1; min-width: 0; }
+.hero-visual { flex: 1; min-width: 0; display: flex; justify-content: center; }
+.hero-cab { width: 100%; max-width: 460px; height: auto; display: block; filter: drop-shadow(0 24px 40px rgba(0,0,0,0.45)); }
+.hero-stats { display: flex; gap: 40px; margin-top: 36px; flex-wrap: wrap; }
+.hero-stat { text-align: left; }
+.hero-stat b { display: block; font-size: 26px; color: #fff; line-height: 1.1; }
+.hero-stat span { font-size: 12px; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 1px; }
+.features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+.step-num { width: 40px; height: 40px; border-radius: 50%; background: #fbb13c; color: #1a1a2e; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; margin-bottom: 14px; }
 @media (max-width: 768px) {
 .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: #1a1a2e; padding: 20px; gap: 20px; z-index: 1000; }
 .nav-links.open { display: flex; }
@@ -13,11 +34,18 @@
 .nav-toggle span { display: block; width: 24px; height: 3px; background: #ffffff; margin: 5px 0; border-radius: 2px; transition: all .3s; }
 .hero-title { font-size: 28px !important; }
 .hero-sub { font-size: 15px !important; }
+.hero-inner { flex-direction: column; text-align: center; gap: 24px; }
+.hero-stats { justify-content: center; }
+.hero-stat { text-align: center; }
+.hero-visual { order: -1; }
+.hero-cab { max-width: 300px; }
 .lookup-card { padding: 28px 20px !important; }
 .lookup-row { flex-direction: column !important; }
 .quote-card { padding: 28px 20px !important; }
 .quote-grid { grid-template-columns: 1fr !important; }
 .fares-table-wrap { overflow-x: auto !important; }
+.features-grid { grid-template-columns: 1fr; }
+.steps-grid { grid-template-columns: 1fr; }
 }
 @media (min-width: 769px) {
 .nav-toggle { display: none; }
@@ -32,11 +60,21 @@
 .pf-32fd1089 { flex: 1; padding: 14px 20px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 18px; font-weight: 600; outline: none; transition: border-color 0.3s; text-transform: uppercase; } .pf-32fd1089:focus { border-color: #fbb13c; }
 .pf-b61d4ce0 { background: #fbb13c; color: #1a1a2e; border: none; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.3s; } .pf-b61d4ce0:hover { background: #e89f2c; }
 .pf-0d9a05da { margin-top: 32px; padding: 24px; border-radius: 12px; display: none; } 
-.pf-ad0eaaaa { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); padding: 80px 24px; text-align: center; } 
-.pf-1ff9defa { font-size: 40px; font-weight: 800; color: #ffffff; max-width: 600px; margin: 0 auto 16px; line-height: 1.2; } 
-.pf-19fada97 { font-size: 18px; color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto 32px; } 
-.pf-fe93c050 { display: inline-block; background: #fbb13c; color: #1a1a2e; padding: 14px 36px; border-radius: 50px; font-size: 16px; font-weight: 700; text-decoration: none; transition: background 0.3s; } .pf-fe93c050:hover { background: #e89f2c; }
-.pf-05a0f8f0 { display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 600; margin-bottom: 20px; } 
+.pf-a89e6ad7 { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); padding: 80px 24px; position: relative; overflow: hidden; } 
+.pf-3214c50f { font-size: 44px; font-weight: 800; color: #ffffff; max-width: 620px; margin-bottom: 16px; line-height: 1.15; } 
+.pf-dd5c6552 { font-size: 17px; color: rgba(255,255,255,0.8); max-width: 500px; margin-bottom: 32px; } 
+.pf-6a60cdab { display: inline-block; background: #fbb13c; color: #1a1a2e; padding: 14px 36px; border-radius: 50px; font-size: 16px; font-weight: 700; text-decoration: none; transition: background 0.3s, transform 0.3s; } .pf-6a60cdab:hover { background: #e89f2c; transform: translateY(-2px); }
+.pf-8ad35a76 { display: inline-block; border: 1px solid rgba(255,255,255,0.5); color: #ffffff; padding: 14px 36px; border-radius: 50px; font-size: 16px; font-weight: 700; text-decoration: none; margin-left: 12px; transition: background 0.3s, transform 0.3s; } .pf-8ad35a76:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
+.pf-d7e0ca94 { display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 600; margin-bottom: 24px; } 
+.pf-e3d994bc { display: flex; flex-wrap: wrap; gap: 12px; } 
+.pf-803f03e2 { padding: 72px 24px; max-width: 1100px; margin: 0 auto; } 
+.pf-63607bf8 { font-size: 32px; font-weight: 800; color: #1a1a2e; text-align: center; margin-bottom: 10px; } 
+.pf-aa7de39e { font-size: 15px; color: #6c757d; text-align: center; max-width: 520px; margin: 0 auto 8px; } 
+.pf-a170e3dc { background: #ffffff; border-radius: 16px; padding: 28px 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); } 
+.pf-1e330eb0 { width: 44px; height: 44px; border-radius: 12px; background: #fdf1dc; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; } 
+.pf-4a0d4aaf { font-size: 17px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; } 
+.pf-b612beab { font-size: 14px; color: #6c757d; line-height: 1.6; } 
+.pf-7dc7b6e9 { padding: 56px 24px 88px; max-width: 1100px; margin: 0 auto; } 
 .pf-78eaae21 { background: #1a1a2e; padding: 12px 32px; display: flex; align-items: center; justify-content: space-between; position: relative; } 
 .pf-ad678292 { background: #ffffff; border-radius: 8px; padding: 4px 14px 4px 4px; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; } 
 .pf-19cdc2f0 { height: 36px; width: auto; display: block; } 
@@ -49,6 +87,9 @@
 .pf-787fdebc { height: 24px; width: auto; display: block; } 
 .pf-9a309d29 { color: rgba(255,255,255,0.6); font-size: 13px; text-decoration: none; margin: 0 10px; transition: color 0.3s; } .pf-9a309d29:hover { color: #fbb13c; }
 .pf-4c29e774 { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 12px; } 
+.pf-9d543ee9 { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); padding: 64px 24px; text-align: center; } 
+.pf-85199119 { font-size: 36px; font-weight: 800; color: #ffffff; margin-bottom: 10px; } 
+.pf-ae340e4d { font-size: 16px; color: rgba(255,255,255,0.8); max-width: 560px; margin: 0 auto; } 
 .pf-199b994a { background: #ffffff; border-radius: 16px; overflow-x: auto; box-shadow: 0 4px 24px rgba(0,0,0,0.06); } 
 .pf-9bdaa2aa { width: 100%; border-collapse: collapse; min-width: 300px; } 
 .pf-ae51d6bd { background: #1a1a2e; color: #ffffff; padding: 12px 16px; text-align: left; font-size: 13px; font-weight: 600; } 
@@ -63,7 +104,7 @@
         document.getElementById('nav-links').classList.toggle('open');
     }
     </script>
-    <nav class="pf-78eaae21"><a href="index.html" class="pf-ad678292"><img src="logo.png" alt="Fare-Cab" class="pf-19cdc2f0" /><span class="pf-db6f24de">Fare Cab</span></a><div class="nav-toggle" onclick="toggleNav()"><span></span><span></span><span></span></div><div id="nav-links" class="nav-links"><a href="index.html" class="pf-ea7c2ae4">Home</a><a href="heathrow.html" class="pf-c672b7ba">Heathrow</a><a href="quote.html" class="pf-2a8c8ec6">Get a Quote</a></div></nav><section class="pf-1a887385"><div class="pf-fbf5e10d lookup-card">
+    <nav class="pf-78eaae21"><a href="index.html" class="pf-ad678292"><img src="logo.png" alt="Fare-Cab" class="pf-19cdc2f0" /><span class="pf-db6f24de">Fare Cab</span></a><div class="nav-toggle" onclick="toggleNav()"><span></span><span></span><span></span></div><div id="nav-links" class="nav-links"><a href="index.html" class="pf-ea7c2ae4">Home</a><a href="heathrow.html" class="pf-c672b7ba">Heathrow</a><a href="quote.html" class="pf-2a8c8ec6">Get a Quote</a></div></nav><section class="pf-9d543ee9"><h1 class="pf-85199119 hero-anim">Heathrow Fares</h1><p class="pf-ae340e4d hero-anim-1">Fixed, upfront pricing to Heathrow Airport. Enter your postcode area for your fare from.</p></section><section class="pf-1a887385"><div class="pf-fbf5e10d lookup-card">
     <script>
     const FARES = {"BR1":{"cost":55.0,"zone":"Bromley"},"BR3":{"cost":58.0,"zone":"Beckenham"},"CR0":{"cost":45.0,"zone":"Croydon"},"CR2":{"cost":48.0,"zone":"South Croydon"},"DA1":{"cost":65.0,"zone":"Dartford"},"DA5":{"cost":68.0,"zone":"Bexley"},"E1":{"cost":52.0,"zone":"Whitechapel"},"E14":{"cost":48.0,"zone":"Canary Wharf"},"E15":{"cost":50.0,"zone":"Stratford"},"E2":{"cost":55.0,"zone":"Bethnal Green"},"EC1":{"cost":42.0,"zone":"Clerkenwell"},"EC2":{"cost":40.0,"zone":"City of London"},"EC4":{"cost":44.0,"zone":"Fleet Street"},"EN1":{"cost":60.0,"zone":"Enfield"},"EN3":{"cost":62.0,"zone":"Enfield Highway"},"EN5":{"cost":58.0,"zone":"Barnet"},"HA0":{"cost":28.0,"zone":"Wembley"},"HA1":{"cost":30.0,"zone":"Harrow"},"HA4":{"cost":35.0,"zone":"Ruislip"},"HA5":{"cost":32.0,"zone":"Pinner"},"HA7":{"cost":35.0,"zone":"Stanmore"},"HA9":{"cost":25.0,"zone":"Wembley Park"},"IG1":{"cost":60.0,"zone":"Ilford"},"IG3":{"cost":62.0,"zone":"Seven Kings"},"KT1":{"cost":28.0,"zone":"Kingston"},"KT3":{"cost":30.0,"zone":"New Malden"},"KT6":{"cost":32.0,"zone":"Surbiton"},"N1":{"cost":58.0,"zone":"Islington"},"N19":{"cost":65.0,"zone":"Archway"},"N5":{"cost":60.0,"zone":"Highbury"},"N7":{"cost":62.0,"zone":"Holloway"},"NW1":{"cost":50.0,"zone":"Camden"},"NW3":{"cost":52.0,"zone":"Hampstead"},"NW5":{"cost":55.0,"zone":"Kentish Town"},"NW8":{"cost":48.0,"zone":"St John's Wood"},"RM1":{"cost":70.0,"zone":"Romford"},"RM3":{"cost":72.0,"zone":"Harold Hill"},"SE1":{"cost":48.0,"zone":"South Bank"},"SE11":{"cost":50.0,"zone":"Lambeth"},"SE15":{"cost":55.0,"zone":"Peckham"},"SE5":{"cost":52.0,"zone":"Camberwell"},"SM1":{"cost":35.0,"zone":"Sutton"},"SM5":{"cost":38.0,"zone":"Carshalton"},"SW1":{"cost":45.0,"zone":"Westminster"},"SW11":{"cost":55.0,"zone":"Battersea"},"SW15":{"cost":58.0,"zone":"Putney"},"SW19":{"cost":52.0,"zone":"Wimbledon"},"SW3":{"cost":48.0,"zone":"Knightsbridge"},"SW5":{"cost":42.0,"zone":"Earl's Court"},"SW7":{"cost":44.0,"zone":"South Kensington"},"TW1":{"cost":25.0,"zone":"Twickenham"},"TW3":{"cost":22.0,"zone":"Hounslow"},"TW6":{"cost":12.0,"zone":"Heathrow"},"TW8":{"cost":18.0,"zone":"Brentford"},"TW9":{"cost":28.0,"zone":"Richmond"},"UB1":{"cost":30.0,"zone":"Southall"},"UB3":{"cost":20.0,"zone":"Hayes"},"UB6":{"cost":25.0,"zone":"Greenford"},"W1":{"cost":38.0,"zone":"West End"},"W11":{"cost":42.0,"zone":"Notting Hill"},"W14":{"cost":44.0,"zone":"West Kensington"},"W2":{"cost":36.0,"zone":"Paddington"},"W8":{"cost":40.0,"zone":"Kensington"},"WC1":{"cost":40.0,"zone":"Bloomsbury"},"WC2":{"cost":38.0,"zone":"Covent Garden"}};
     function lookupFare() {
