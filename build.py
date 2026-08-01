@@ -189,10 +189,15 @@ def _footer() -> str:
             tags.a(href="quote.html", class_=link.class_name)("Get a Quote"),
         ),
         tags.p(style={"margin-top": "8px", "font-size": "13px", "color": "rgba(255,255,255,0.6)"})(
-            tags.a(href="mailto:suport@fare-cab.co.uk", style={"color": "#fbb13c", "text-decoration": "none"})("suport@fare-cab.co.uk"),
+            tags.a(href="mailto:support@fare-cab.co.uk", style={"color": "#fbb13c", "text-decoration": "none"})("support@fare-cab.co.uk"),
         ),
         tags.p(class_=p_s.class_name)("Copyright 2026 Fare-Cab. All rights reserved."),
     ).render()
+
+
+def _min_fare() -> float:
+    rows = _get_fares_data()
+    return min(cost for _, cost, _ in rows)
 
 
 class HeroSection(Component):
@@ -228,7 +233,19 @@ class HeroSection(Component):
             "transition": "background 0.3s",
             ":hover": {"background": "#e89f2c"},
         })
+        badge = Style({
+            "display": "inline-block",
+            "background": "rgba(255,255,255,0.12)",
+            "border": "1px solid rgba(255,255,255,0.25)",
+            "color": "#fff",
+            "padding": "8px 20px",
+            "border-radius": "50px",
+            "font-size": "13px",
+            "font-weight": "600",
+            "margin-bottom": "20px",
+        })
         return tags.section(class_=s.class_name)(
+            tags.span(class_=badge.class_name)(f"Fares from \u00a3{_min_fare():.0f}"),
             tags.h1(class_=f"{h1_s.class_name} hero-title", style={"font-size": "40px"})("London Black Cab Fares"),
             tags.p(class_=f"{p_s.class_name} hero-sub")(
                 "Know your fare before you ride. Instant Heathrow airport transfer pricing."
@@ -262,21 +279,20 @@ def _fare_lookup_html(rows) -> str:
             result.style.display = 'block'; result.style.background = '#fff3cd'; result.style.color = '#856404';
             result.innerHTML = 'Enter a postcode area like SW1 or N1.'; return;
         }}
-        const exact = FARES[raw];
-        if (exact) {{
+        function show(prefix, zone) {{
+            const f = FARES[prefix];
             result.style.background = '#d4edda'; result.style.color = '#155724';
-            result.innerHTML = '<div style="font-size:14px">Fare from <strong>'+raw+'</strong> ('+exact.zone+') to Heathrow:</div>' +
-                '<div style="font-size:36px;font-weight:800;color:#1a1a2e">\u00a3'+exact.cost.toFixed(2)+'</div>';
-            result.style.display = 'block'; return;
+            result.innerHTML = '<div style="font-size:14px">Fares from <strong>'+prefix+'</strong> ('+zone+') to Heathrow:</div>' +
+                '<div style="font-size:36px;font-weight:800;color:#1a1a2e">from \u00a3'+Math.round(f.cost)+'</div>' +
+                '<div style="font-size:12px;margin-top:6px;opacity:.75">Fixed price, no hidden extras.</div>';
+            result.style.display = 'block';
         }}
+        const exact = FARES[raw];
+        if (exact) {{ show(raw, exact.zone); return; }}
         let match=null, ml=0;
         for(const k of Object.keys(FARES)) {{ if(raw.startsWith(k)&&k.length>ml){{ match=k;ml=k.length; }} }}
-        if(match) {{
-            const f=FARES[match];
-            result.style.background='#d4edda'; result.style.color='#155724';
-            result.innerHTML='<div style="font-size:14px">Fare from <strong>'+match+'</strong> ('+f.zone+') to Heathrow:</div>'+
-                '<div style="font-size:36px;font-weight:800;color:#1a1a2e">\u00a3'+f.cost.toFixed(2)+'</div>';
-        }} else {{
+        if(match) {{ show(match, FARES[match].zone); }}
+        else {{
             result.style.background='#fff3cd'; result.style.color='#856404';
             result.innerHTML='No fare data for "'+raw+'". Try SW1 or N1.';
         }}
@@ -327,7 +343,7 @@ def _lookup_card_section(rows=None) -> str:
     return tags.div(class_=f"{card_s.class_name} lookup-card")(
         Raw(_fare_lookup_html(rows)),
         tags.h2(class_=h2_s.class_name)("Heathrow Fare Lookup"),
-        tags.p(class_=sub_s.class_name)("Enter your postcode area for the fixed fare to Heathrow."),
+        tags.p(class_=sub_s.class_name)("Enter your postcode area to see fares to Heathrow."),
         tags.div(class_=label_s.class_name)("Postcode Area"),
         tags.div(class_="lookup-row", style={"display": "flex", "gap": "12px", "align-items": "center", "flex-wrap": "wrap"})(
             tags.input_(type="text", id="pcode", class_=inp.class_name,
@@ -369,7 +385,7 @@ def _fares_table_section(rows=None) -> str:
         rows_html += (
             f"<tr><td class='{cls}'><strong>{prefix}</strong></td>"
             f"<td class='{cls}'>{zone}</td>"
-            f"<td class='{cls}'><span class='{cost_s.class_name}'>\u00a3{cost:.2f}</span></td></tr>"
+            f"<td class='{cls}'><span class='{cost_s.class_name}'>from \u00a3{cost:.0f}</span></td></tr>"
         )
 
     return tags.div(style={"margin-top": "48px"})(
@@ -379,7 +395,7 @@ def _fares_table_section(rows=None) -> str:
                 tags.thead()(tags.tr()(
                     tags.th(class_=th_s.class_name)("Area"),
                     tags.th(class_=th_s.class_name)("Zone"),
-                    tags.th(class_=th_s.class_name)("Fare"),
+                    tags.th(class_=th_s.class_name)("Fares from"),
                 )),
                 tags.tbody()(Raw(rows_html)),
             ),
@@ -538,7 +554,7 @@ class QuotePage(Component):
                         "Thank you! We'll be in touch shortly."
                     ),
                     tags.div(id="qerr", class_=error_s.class_name)(
-                        'Something went wrong. Email us at <a href="mailto:suport@fare-cab.co.uk" style="color:#721c24;font-weight:700;text-decoration:underline">suport@fare-cab.co.uk</a>.'
+                        'Something went wrong. Email us at <a href="mailto:support@fare-cab.co.uk" style="color:#721c24;font-weight:700;text-decoration:underline">support@fare-cab.co.uk</a>.'
                     ),
                     tags.p(class_=note_s.class_name)(
                         "Your data is kept secure. By submitting you agree to our privacy policy."
